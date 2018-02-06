@@ -1,6 +1,6 @@
 # hello-clojure
 
-FIXME: description
+从零开始学习clojure，从入门到擅长
 
 ## Installation
 
