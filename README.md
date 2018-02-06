@@ -2,6 +2,9 @@
 
 从零开始学习clojure，从入门到擅长
 
+参考资料：
++ Living Clojure
+
 ## Installation
 
 Download from http://example.com/FIXME.
