@@ -1,6 +1,10 @@
 (ns hello-clojure.main
+  ;; 导入clojure.set库
+  (:require [clojure.set])
+
   (:gen-class)
   )
+
 ;; 文件名用下划线，命名空间用横线
 
 ;; 最基本的运行方式，读取-计算-打印-循环
@@ -168,12 +172,12 @@ nil
 
 
 ;; 对集合可以做下面的操作：并集、差集、交集
-;; ;; 并集
-;; (clojure.set/union #{:r :b :w} #{:w :p :y})
-;; ;; 从第一个集合里面减去跟第二个合集里面相同的元素
-;; (clojure.set/difference #{:r :b :w} #{:w :p :y})
-;; ;; 交集
-;; (clojure.set/intersection #{:r :b :w} #{:w :p :y})
+;; 并集
+(clojure.set/union #{:r :b :w} #{:w :p :y})
+;; 从第一个集合里面减去跟第二个合集里面相同的元素
+(clojure.set/difference #{:r :b :w} #{:w :p :y})
+;; 交集
+(clojure.set/intersection #{:r :b :w} #{:w :p :y})
 
 ;; 通过set将其它类型的容器转成集合
 (set [:rabbit :rabbit :watch :door])
@@ -208,8 +212,72 @@ hello
 
 
 ;; 符号
+;; 全局符号
 (def developer "Alice")
+hello-clojure.main/developer
+developer
 
+;; 局部符号
+(let [developer "Alice in Wonderland"]
+  developer)
+;; 这个还是全局的
+developer
+;; let的局部符号要配对
+(let [hello 1
+      good nil]
+  hello
+  good)
+(let [developer "Alice in Wonderland"
+      rabbit "white rabbit"]
+  [developer rabbit])
+;; 全局符号里面没有rabbit
+;; rabbit
+
+
+;; 创建我们自己的函数
+;; 参数为空
+(defn follow-the-rabbit []
+  "Off we go!")
+follow-the-rabbit
+(follow-the-rabbit)
+
+;; 带两个参数
+(defn shop-for-jams [jam1 jam2]
+  {:name "jam-basket"
+   :jam1 jam1
+   :jam2 jam2}
+  )
+(shop-for-jams "hello" "world")
+
+;; 定义匿名函数
+(fn []
+  (str "off we go" "!"))
+;; 调用匿名函数，简单地加上括号就可以了
+((fn []
+   (str "off we go" "!")))
+;; 快捷方式定义匿名函数
+(#(str "off we go" "!"))
+;; 带一个参数的匿名函数快捷定义方式
+(#(str "of we go" "!"  " - " % ) "again")
+;; 带多个参数的匿名函数快捷定义方式
+(#(str "of we go" "!"  " - " %1 " " %2 ) "again" "hello")
+;; 不过上面这种方式不好，不能很好得表示出参数的名字
+
+;; 查看当前所处的命名空间
+*ns*
+
+(def fav-food "strawberry jam")
+fav-food
+hello-clojure.main/fav-food
+
+;; 切换命名空间
+(ns rabbit.favfoods)
+;; 这里调用就会出错，因为没有这个命名空间，自然也没有这个符号的定义了
+;; fav-food
+;; 直接引用全路径的命名空间调用就可以
+hello-clojure.main/fav-food
+(ns hello-clojure.main)
+fav-food
 
 ;; TODO: clojure里面nil跟'()有区别吗
 (rest nil)
