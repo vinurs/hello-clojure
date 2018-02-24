@@ -2,6 +2,7 @@
   ;; 导入clojure.set库
   (:require [clojure.set])
 
+  (:import (java.net InetAddress))
   (:gen-class))
 
 ;; 文件名用下划线，命名空间用横线
@@ -237,9 +238,10 @@ developer
 ;; 创建我们自己的函数
 ;; 参数为空
 (defn follow-the-rabbit []
-  "Off we go!")
+  (println "Off we go!")
+  )
 follow-the-rabbit
-(follow-the-rabbit)
+;; (follow-the-rabbit)
 
 ;; 带两个参数
 (defn shop-for-jams [jam1 jam2]
@@ -313,3 +315,138 @@ fav-food
 (first '(nil))
 (rest '(nil))
 (rest '(nil nil))
+
+
+;; 逻辑测试
+(empty? [:table :door :key])
+
+(empty? [])
+(empty? {})
+(empty? '())
+(empty? nil)
+
+(seq [1 2 3])
+(class [1 2 3])
+(class (seq [1 2 3]))
+(seq [])
+
+(every? odd? [1 3 5])
+(every? odd? [1 2 3 4 5])
+
+(defn drinkable? [x]
+  (= x :drinkme))
+(drinkable? 'hello)
+(drinkable? :drinkme)
+
+(every? drinkable? [:drinkme :drinkme])
+(every? drinkable? [:drinkme :poison])
+(every? (fn [x] (= x :drinkme)) [:drinkme :posion])
+(every? (fn [x] (= x :drinkme)) [:drinkme :drinkme])
+
+
+;; 流控制
+(if true "it is true"
+    ;; else
+    "it is false")
+
+(if false "it is true"
+    ;; else
+    "it is false")
+
+(if nil "it is true"
+    ;; else
+    "it is false")
+
+(if 1 "it is true"
+    ;; else
+    "it is false")
+(if '() "it is true"
+    ;; else
+    "it is false")
+;; 所以只有nil跟false是false
+
+(if (= :drinkme :drinkme)
+  "Try it"
+  "Dont't try it")
+
+(let [need-to-grow-small (> 5 3)]
+  (if need-to-grow-small
+    "drink bottle"
+    "don't drink bottle"))
+
+;; 将一个boolen绑定到一个符号，如果为真，那么执行第一条语句；否则执行第二条语句
+(if-let [need-to-grow-small (> 5 3)]
+  "drink bottle"
+  "don't drink bottle")
+
+;; when，当一个条件为真的时候才执行下面的语句
+(defn drink [need-to-grow-small]
+  (when need-to-grow-small
+    "drink bottle"))
+(drink true)
+(drink nil)
+
+(when-let [need-to-grow-small true]
+  "drink bottle")
+(when-let [need-to-grow-small false]
+  "drink bottle")
+
+;; cond测试更多的条件，一旦一个测试返回true，其它的测试子句都不会被尝试
+(let [bottle "drinkme"]
+  (cond
+    (= bottle "poison") "don't touch"
+    (= bottle "drinkme") "grow smaller"
+    (= bottle "empty") "all gone"))
+
+
+(let [x 2]
+  (cond
+    (> x 10) "bigger than 10"
+    (> x 4) "bigger than 4"
+    (> x 3) "bigger than 3"
+    :else "< 3"))
+
+;; case
+(let [bottle "drinkme"]
+  (case bottle
+    "poison" "don't touch"
+    "drinkme" "grow smaller"
+    "empty" "all gone"
+    "unknown"))
+(let [bottle "hehe"]
+  (case bottle
+    "poison" "don't touch"
+    "drinkme" "grow smaller"
+    "empty" "all gone"
+    "unknown"))
+
+
+;; 创建函数
+(defn grow [name direction]
+  (if (= direction :small)
+    (str name " is growing smaller")
+    (str name " is growing bigger")))
+(grow "Alice" :small)
+(grow "Alice" :big)
+(partial grow "Alice")
+
+
+;; 跟java进行交互，用句点
+(. "caterpillar" toUpperCase)
+
+;; .是不是被重定义的
+;; (defn . []
+;;   "good")
+;; (hello-clojure.basic/.)
+;; (.)
+
+;; 用new来创建java对象实例
+(new String "Hi!")
+;; 快捷方式
+(String. "Hi!")
+
+;; 调用java的方法
+(InetAddress/getByName "localhost")
+
+(class 5)
+(class 28888888888888888888888888888888888888888)

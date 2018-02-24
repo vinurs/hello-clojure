@@ -1,5 +1,5 @@
 (ns hello-clojure.main
-  (:require [hello-clojure.basic])
+  (:require [hello-clojure.basic :as basic])
   (:gen-class)
   )
 
@@ -9,4 +9,5 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (println "Hello, World!")
+  (basic/follow-the-rabbit))
