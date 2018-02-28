@@ -8,6 +8,23 @@
 ;; 文件名用下划线，命名空间用横线
 ;; 文件名用下划线，命名空间用横线
 
+;; 这个是单行注释
+;; 下面的是多行注释
+(comment "
+
+...我是...
+
+...多行...
+...注释...
+
+")
+;; 不过像下面这样嵌入多行注释还是有问题的，所以还是用分号来得靠谱
+;; (+ 1
+;;     (comment
+;;       "这个
+;;  是多行注释")
+;;    2)
+
 ;; 最基本的运行方式，读取-计算-打印-循环
 ;; 基本类型
 ;; 整数
@@ -58,14 +75,103 @@ nil
 (+ 1 1)
 (+ 1 (+ 8 3))
 
+;; 变量
+;; Clojure里面是不支持变量的。它跟变量有点像，但是在被赋值之前是不允许改的，包括：全局binding, 线程本地(thread local)binding， 以及函数内的本地binding， 以及一个表达式内部的binding。
+;; def定义全局bindings
+(def hello-vinurs "hello ,vinurs")
+hello-vinurs
+;; ::用来引用当前命名空间的关键字
+::hello-vinurs
+;; def除了定义全局binding，还可以用来修改bindings
 
-;; 组织数据，容器
-;; 列表
+;; 函数的参数是只在这个函数内可见的本地binding
+
+;; let 这个special form 创建局限于一个 当前form的bindings
+;; let 是串行的赋值的, 所以后面的binding可以用前面binding的值,
+(let [hello 1
+      ;; 这里可以看出vinurs利用了hello的值
+      vinurs (+ 1 hello)]
+  hello
+  vinurs)
+
+;; 下面的例子详细介绍了 def , let 和 binding 的用法。
+(def ^:dynamic v 1) ; v is a global binding
+v
+(defn f1 []
+  (println "f1: v =" v)) ; global binding
+(f1)
+(defn f2 []
+  (println "f2: before let v =" v) ; global binding
+  (let [v 2] ; creates local binding v that shadows global one
+    (def v 8)
+    ;; 从这里也可以看出def貌似只能用来修改全局变量
+    (println "f2: in let, v =" v) ; local binding
+    (f1))
+  (println "f2: after let v =" v)) ; global binding
+(f2)
+
+(defn f3 []
+  (println "f3: before binding v =" v) ; global binding
+  (binding [v 3] ; same global binding with new, temporary value
+    ;; 这时候全局绑定临时的值变成了3
+    (println "f3: in binding, v =" v) ; global binding
+    (f1))
+  (println "f3: after binding v =" v)) ; global binding
+(f3)
+(defn f4 []
+  (def v 4)) ; changes the value of the global binding
+(f4)
+(println "after calling f4, v =" v)
+
+
+
+
+
+;; 组织数据，容器   开始
+;; 所有的clojure集合是不可修改的、异源的以及持久的。
+;; 不可修改的意味着一旦一个集合产生之后，你不能从集合里面删除一个元素，也往集合里面添加一个元素
+;; 异源的意味着一个集合里面可以装进任何东西（而不必须要这些东西的类型一样）
+;; 持久的以为着当一个集合新的版本产生之后，旧的版本还是在的。
+
+;; 列表，相当于C语言里面的链表吧
+;; 对列表操作
+;; 最简单直接的创建list的方式
 '(1 2 "jam" :marmalade-jar)
 ;; clojure里面可以使用逗号来隔开元素，但是会被忽略，一般的写法都是用空格来隔开就好
 '(1, 2, "jam", :bee)
 
-;; 对列表操作
+;; 其它的创建列表的方式
+(def stooges (list "Moe" "Larry" "Curly"))
+stooges
+(def stooges (quote ("Moe" "Larry" "Curly")))
+stooges
+(def stooges '("Moe" "Larry" "Curly"))
+stooges
+
+;; 往列表里面添加元素，构建一个新的列表
+stooges
+(def more-stooges (conj stooges "Shemp"))
+more-stooges
+(conj stooges "Shemp")
+(cons "Shemp" stooges)
+
+;; remove 函数创建一个只包含所指定的谓词函数测试结果为false的元素的集合:
+;; -> ("Shemp" "Moe" "Larry")
+(def less-stooges (remove #(= % "Curly") more-stooges))
+less-stooges
+
+;; into 函数把两个list里面的元素合并成一个新的大list
+(def kids-of-mike '("Greg" "Peter" "Bobby"))
+(def kids-of-carol '("Marcia" "Jan" "Cindy"))
+(def brady-bunch (into kids-of-mike kids-of-carol))
+(println brady-bunch) ; -> (Cindy Jan Marcia Greg Peter Bobby)
+
+;; 获得列表第一个元素
+(peek kids-of-mike)
+;; 获得除第一个元素以外的剩下的列表
+(pop kids-of-mike)
+;; 其实这个也就相当于first rest
+
 ;; 获取列表第一个元素
 (first '(:rabbit :pocket-watch :marmalade :door))
 ;; 获取列表中除了第一个元素剩下的列表
@@ -98,7 +204,7 @@ nil
 (list 2 nil)
 
 
-;; 向量vector
+;; 向量vector，相当于C语言里面的数组，访问第几个元素直接就是O(1)，很高效
 [:jar1  1 2 3 :jar2]
 ;; first跟rest同样适用vector
 (first [:jar1  1 2 3 :jar2])
@@ -203,14 +309,18 @@ nil
 ;; 移除集合中的某个元素
 (disj #{:rabbit :door :jam} :door)
 
+;; 组织数据，容器   结束
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 所有的容器都是不可变且持久化，意味着容器里面的内容是不会改变了，
 ;; 我们的对容器的所有的操作返回的都是这个结构的的一个新版本，通过下面的函数就可以看出来了
 (def hello {:jam1 "red" :jam2 "black"})
 hello
+::hello
 (dissoc hello :jam1)
 hello
 
+(def n 2)
 
 ;; 符号
 ;; 全局符号
