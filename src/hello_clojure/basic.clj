@@ -6,7 +6,6 @@
   (:gen-class))
 
 ;; 文件名用下划线，命名空间用横线
-;; 文件名用下划线，命名空间用横线
 
 ;; 这个是单行注释
 ;; 下面的是多行注释
@@ -52,6 +51,12 @@
 (/ 6 3)
 (/ 6 4)
 
+1
+"a string"
+["a" "vector" "of" "string"]
+
+(+ 1 2 3)
+(str "It was the panda " "in the library " "with a dust buster")
 
 ;; 字符串
 "jam"
@@ -93,6 +98,20 @@ hello-vinurs
       vinurs (+ 1 hello)]
   hello
   vinurs)
+
+(def failed-protagonist-names
+  ["Larry Potter" "Doreen the Explorer" "The Incredible Bulk"])
+failed-protagonist-names
+
+(def severity :mild)
+(def error-message "OH GOD! IT'S A DISASTER! WE'RE ")
+(defn error-message
+  [severity]
+  (str "OH GOD! IT'S A DISASTER! WE'RE "
+       (if (= severity :mild)
+         "MILDLY INCONVENIENCED!"
+         "DOOOOOOOMED!")))
+(error-message :mild)
 
 ;; 下面的例子详细介绍了 def , let 和 binding 的用法。
 (def ^:dynamic v 1) ; v is a global binding
