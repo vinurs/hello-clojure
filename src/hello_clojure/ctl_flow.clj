@@ -1,15 +1,17 @@
 (ns hello-clojure.ctl-flow
   ;; 导入clojure.set库
-  (:require [clojure.set])
+  (:require [clojure.repl :as r :refer [doc]]
+            [clojure.set])
   )
 
 
 ;; clojure控制流
 
+*ns*
+
 (if true
   "By Zeus's hammer!"
   "By Aquaman's trident!")
-
 
 (if false
   "By Zeus's hammer!"
@@ -26,6 +28,40 @@
       "By Zeus's hammer!")
   (do (println "Failure!")
       "By Aquaman's trident!"))
+
+
+;; clojure里面的逻辑真跟逻辑假包含哪些？
+;; true表示真，false表示假
+;; nil一般情况下表示什么值都没有，但是在逻辑谓词中表示逻辑真
+;; 所以nil跟false表示逻辑假，别的都表示为逻辑真
+;; ()表示空列表，但是在逻辑测试表达式里面表示逻辑真
+;; 那么clojure有哪些逻辑测试表达式呢？
+;; 有if/and/or/when/=
+;; 也就是说，对于逻辑测试表达式，只可能返回四种值，false/nil/true/其它
+
+(if (not ())
+  true
+  false)
+(and () 1)
+
+(when nil
+  "nothing")
+
+;; 这里()就是表示真
+(when ()
+  "()")
+
+;; 这里说明()在逻辑表达式里面表示真
+(or nil ())
+(or () nil)
+
+(if (not nil)
+  true
+  false)
+(false? ())
+(false? nil)
+
+(doc false?)
 
 ;; when，当判断条件为真的时候，就执行下面的语句，相当于if and do的结合，可以用来执行多条语句
 ;; 当判断条件为假的时候就返回nil

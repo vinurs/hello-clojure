@@ -5,6 +5,7 @@
   (:gen-class))
 
 
+;; 定义了人体部位的左侧
 (def asym-hobbit-body-parts [{:name "head" :size 3}
                              {:name "left-eye" :size 1}
                              {:name "left-ear" :size 1}
@@ -26,15 +27,18 @@
                              {:name "left-foot" :size 2}])
 
 
+;; 匹配某个部位，如果是以left-开头，那么创建对应的right-部位
 (defn matching-part
   [part]
   ;; 返回一个map
   {:name (clojure.string/replace (:name part) #"^left-" "right-")
    :size (:size part)})
 
+;; 构建人体的所有部位
 (defn symmetrize-body-parts
   "Expects a seq of maps that have a :name and :size"
   [asym-body-parts]
+  ;; 依次遍历整个vector
   (loop [remaining-asym-parts asym-body-parts
          final-body-parts []]
     (if (empty? remaining-asym-parts)
@@ -67,6 +71,60 @@ x
 (let [x (inc x) y x]
   x)
 
-(let [[pongo & dalmatians]
-      dalmatian-list]
+(let [[pongo & dalmatians] dalmatian-list]
   [pongo dalmatians])
+
+
+;; 循环
+(loop [iteration 0]
+  (println (str "Iteration " iteration))
+  (if (> iteration 3)
+    (println "Goodbye!")
+    (recur (inc iteration))))
+;; loop初始化一个binding，然后通过recur再次进入这个loop部分
+
+
+(defn recursive-printer
+  ([]
+   (recursive-printer 0))
+  ([iteration]
+   (println iteration)
+   (if (> iteration 3)
+     (println "Goodbye!")
+     (recursive-printer (inc iteration)))))
+(recursive-printer)
+
+
+;; 正则表达式，用来进行模式匹配
+;; 正则表达式其实就是字符串，在clojure里面以#""表示正则
+#"a"
+
+(defn matching-part
+  [part]
+  {:name (clojure.string/replace (:name part) #"^left-" "right-")
+   :size (:size part)})
+
+(matching-part {:name "left-eye" :size 1})
+(matching-part {:name "head" :size 3})
+
+;; sum with reduce
+(reduce + [1 2 3 4])
+
+
+(defn my-reduce
+  ([f initial coll]
+   (loop [result initial
+          remaining coll]
+     (if (empty? remaining)
+       result
+       (recur (f result (first remaining)) (rest remaining)))))
+  ([f [head & tail]]
+   (my-reduce f head tail)))
+
+(defn better-symmetrize-body-parts
+  "Expects a seq of maps that have a :name and :size"
+  [asym-body-parts]
+  (reduce (fn [final-body-parts part]
+            (into final-body-parts (set [part (matching-part part)])))
+          []
+          asym-body-parts))

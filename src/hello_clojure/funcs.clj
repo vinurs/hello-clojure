@@ -12,7 +12,7 @@
 (first [1 2 3 4])
 
 ;; 返回另一个函数
-(or + -)
+(or first + - )
 
 ;; 通过返回的函数来进行函数调用
 ((or + -) 1 2 3)
@@ -28,6 +28,8 @@
 (map inc [1])
 ;; => (1 2 3 4)
 (map inc [0 1 2 3])
+(doc map)
+(doc doc)
 
 ;; 函数的调用过程，其实就是递归
 ;; 从左往右，从外往里，再从里往外，再向右继续计算
@@ -144,10 +146,74 @@
 (my-first ["oven" "bike" "war-axe"])
 
 
-;; 解构？destructuring
-;; 这个概念过会儿再理解吧
+;; 解构，destructuring
+
+;; Return the first element of a collection
+(defn my-first
+  [[first-thing]] ; Notice that first-thing is within a vector
+  first-thing)
+(my-first ["oven" "bike" "war-axe"])
+
+(defn my-second
+  [[first second]]
+  second)
+(my-second ["hello" "this is second"])
+
+(defn chooser
+  [[first-choice second-choice & unimportant-choices]]
+  (println (str "Your first choice is: " first-choice))
+  (println (str "Your second choice is: " second-choice))
+  (println (str "We're ignoring the rest of your choices. "
+                "Here they are in case you need to cry over them: "
+                (clojure.string/join ", " unimportant-choices))))
+
+(chooser ["Marmalade", "Handsome Jack", "Pigpen", "Aquaman"])
+
+(defn announce-treasure-location
+  [{lat :lat lng :lng}]
+  (println (str "Treasure lat: " lat))
+  (println (str "Treasure lng: " lng)))
+(announce-treasure-location {:lat 28.22 :lng 81.33})
+(announce-treasure-location {28.22 :lat :lng 81.33})
+(:lat {:lat 28.22 })
 
 
+(defn announce-treasure-location
+  [{:keys [lat lng]}]
+  (println (str "Treasure lat: " lat))
+  (println (str "Treasure lng: " lng)))
+(announce-treasure-location {:lat 28.22 :lng 81.33})
+
+;; (defn receive-treasure-location
+;;   [{:keys [lat lng] :as treasure-location}]
+;;   (println (str "Treasure lat: " lat))
+;;   (println (str "Treasure lng: " lng))
+;;   ;; One would assume that this would put in new coordinates for your ship
+;;   (steer-ship! treasure-location))
+
+;; 关于解构的理解
+;; 参考这里https://wizardforcel.gitbooks.io/clojure-fpftj/content/26.html
+;; http://blog.csdn.net/lord_is_layuping/article/details/47061287
+(defn summer-sales-percentage
+  ;; The keywords below indicate the keys whose values
+  ;; should be extracted by destructuring.
+  ;; The non-keywords are the local bindings
+  ;; into which the values are placed.
+  [{june :june july :july august :august :as all}]
+  (let [summer-sales (+ june july august)
+        all-sales (apply + (vals all))]
+    (/ summer-sales all-sales)))
+(def sales {
+            :january   100 :february 200 :march      0 :april    300
+            :may       200 :june     100 :july     400 :august   500
+            :september 200 :october  300 :november 400 :december 600})
+
+(summer-sales-percentage sales) ; ratio reduced from 1000/3300 -> 10/33
+
+;; 从上面可以看出，解构只用在函数或者宏的参数里面或者是let变量里面
+;; 向量、map都可以用来解构
+;; 向量依次解构里面每个元素
+;; map依次解构里面的key
 
 
 ;; 匿名函数，可以不需要名字的函数

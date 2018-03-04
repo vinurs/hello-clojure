@@ -1,6 +1,7 @@
 (ns hello-clojure.basic
   ;; 导入clojure.set库
-  (:require [clojure.set])
+  (:require [clojure.repl :as r :refer [doc]]
+            [clojure.set])
 
   (:import (java.net InetAddress))
   (:gen-class))
@@ -112,6 +113,8 @@ failed-protagonist-names
          "MILDLY INCONVENIENCED!"
          "DOOOOOOOMED!")))
 (error-message :mild)
+
+*ns*
 
 ;; 下面的例子详细介绍了 def , let 和 binding 的用法。
 (def ^:dynamic v 1) ; v is a global binding
