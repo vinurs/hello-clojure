@@ -6,7 +6,7 @@
   (:import (java.net InetAddress))
   (:gen-class))
 
-;; 文件名用下划线，命名空间用横线
+;; 类似java，文件名用下划线，命名空间用横线
 
 ;; 这个是单行注释
 ;; 下面的是多行注释
@@ -99,6 +99,11 @@ hello-vinurs
       vinurs (+ 1 hello)]
   hello
   vinurs)
+
+
+;; clojure里面def表示把一个名字绑定到一个值，可以看出名字是跟着值走，不是值跟着名字走
+;; clojure数据类型都是不可变数据类型，所以一旦数据定义好了，那是不能改的
+;; 如果要修改值，那就是重新创建值，然后再给这个新创建的值绑定一个名字
 
 (def failed-protagonist-names
   ["Larry Potter" "Doreen the Explorer" "The Incredible Bulk"])
@@ -577,6 +582,7 @@ fav-food
 ;; 快捷方式
 (String. "Hi!")
 
+(fn )
 ;; 调用java的方法
 (InetAddress/getByName "localhost")
 

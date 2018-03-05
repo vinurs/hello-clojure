@@ -1,4 +1,4 @@
-(ns hello-clojure.ctl-flow
+(ns hello-clojure.ctrl-flow
   ;; 导入clojure.set库
   (:require [clojure.repl :as r :refer [doc]]
             [clojure.set])
@@ -8,6 +8,11 @@
 ;; clojure控制流
 
 *ns*
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; if
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (if true
   "By Zeus's hammer!"
@@ -32,17 +37,29 @@
 
 ;; clojure里面的逻辑真跟逻辑假包含哪些？
 ;; true表示真，false表示假
-;; nil一般情况下表示什么值都没有，但是在逻辑谓词中表示逻辑真
+;; nil一般情况下表示什么值都没有，但是在逻辑谓词中表示逻辑假
 ;; 所以nil跟false表示逻辑假，别的都表示为逻辑真
 ;; ()表示空列表，但是在逻辑测试表达式里面表示逻辑真
 ;; 那么clojure有哪些逻辑测试表达式呢？
-;; 有if/and/or/when/=
+;; 有if/and/or/when/=/</>/not/
 ;; 也就是说，对于逻辑测试表达式，只可能返回四种值，false/nil/true/其它
 
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; not
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(not nil)
+(not ())
+(doc not)
 (if (not ())
   true
   false)
 (and () 1)
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; when
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when nil
   "nothing")
@@ -82,8 +99,12 @@
 (nil? 1)
 (nil? nil)
 (nil? false)
+
+
 (false? false)
 (false? nil)
+
+(true? "h")
 
 (= 1 1)
 ;; => true
@@ -127,7 +148,63 @@
 ;; 如果一直遇到不为false的语句，那么返回最后一条语句的值
 
 
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; let
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(let [x 3] x)
+;; => 3
+
+(def dalmatian-list
+  ["Pongo" "Perdita" "Puppy 1" "Puppy 2"])
+
+(let [dalmatians (take 2 dalmatian-list)]
+  dalmatians)
+;; => ("Pongo" "Perdita")
+
+
+(def x 0)
+;; let引入了一个新的作用域
+(let [x 1] x)
+;; => 1
+
+(def x 0)
+;; let里面引用已经定义的全局变量
+(let [x (inc x)] x)
+;; => 1
+
+;; let的解构用法，参见解构部分
+(let [[pongo & dalmatians] dalmatian-list]
+  [pongo dalmatians])
+;; => ["Pongo" ("Perdita" "Puppy 1" "Puppy 2")]
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 循环
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; loop/recur
+(loop [iteration 0]
+  (println (str "Iteration " iteration))
+  (if (> iteration 3)
+    (println "Goodbye!")
+    (recur (inc iteration))))
+
+;; loop跟recur配合起来使用就类似于定义了一个函数，然后递归调用这个函数
+;; 比如下面的定义，就类似一个循环
+(defn recursive-printer
+  ([]
+   (recursive-printer 0))
+  ([iteration]
+   (println iteration)
+   (if (> iteration 3)
+     (println "Goodbye!")
+     (recursive-printer (inc iteration)))))
+(recursive-printer)
+
+;; 循环的本质就是一个初始化判断条件，然后再次递归调用直到某个条件不满足
+
+
 ;; This program displays Hello World
 (defn Example []
   (dotimes [n 5]

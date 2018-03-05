@@ -4,7 +4,9 @@
    [clojure.java.javadoc :refer [javadoc]])
   (:gen-class))
 
-;; 函数相关
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 函数
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 函数调用示例
 (+ 1 2 3 4)
@@ -18,6 +20,7 @@
 ((or + -) 1 2 3)
 ((and (= 1 1) +) 1 2 3)
 ((first [+ 0]) 1 2 3)
+
 
 (inc 1.1)
 
@@ -42,19 +45,23 @@
 (+ 200 20) ; evaluated (/ 100 5)
 220 ; final evaluation
 
+;; 一般的函数，参数在传给函数之前，都会被求值求好
 
-;; 特殊的函数调用形式，他们不会计算完所有的参数
+;; 特殊的form调用形式，他们不会计算完所有的参数
 ;; 例如if，如果第一个为假，那么后面为真的语句是不会执行的
 ;; (if boolean-form then-form optional-else-form)
 
 
 ;; 函数定义
 (defn too-enthusiastic
-  "Return a cheer that might be a bit too enthusiastic"
+  "Return a cheer that might be a bit too enthusiastic
+  hello"
   [name]
   (str "OH. MY. GOD! " name " YOU ARE MOST DEFINITELY LIKE THE BEST "
          "MAN SLASH WOMAN EVER I LOVE YOU AND WE SHOULD RUN AWAY SOMEWHERE"))
 (too-enthusiastic "Zelda")
+;; 用doc来查看函数的帮助
+(doc too-enthusiastic)
 
 ;; 查看map函数的用法
 (doc map)
@@ -103,6 +110,8 @@
 ;; clojure采用了和C语言里面类似的做法： declare, 看例子:
 ;; (declare function-names)
 
+
+;; 可变参数，会把剩余的参数放入到一个list里面
 ;; 参数个数不定的函数的定义方式
 (defn power [base & exponents]
   ;; Using java.lang.Math static method pow.
@@ -146,19 +155,30 @@
 (my-first ["oven" "bike" "war-axe"])
 
 
-;; 解构，destructuring
+;; 函数参数解构，destructuring
+;; 结构可以很容易让你将一个collection里面的值绑定到一个名字,例如vector里面的值
 
 ;; Return the first element of a collection
 (defn my-first
   [[first-thing]] ; Notice that first-thing is within a vector
   first-thing)
+;;
 (my-first ["oven" "bike" "war-axe"])
+
+(my-first '(1 2 3))
+
+;; 下面会报错，那就是解构[]只作用于vector以及list
+;; 或者说结构map有另外一种方式
+;; (my-first {:a b :c d})
+;; (my-first #{1 2 3})
+
 
 (defn my-second
   [[first second]]
   second)
 (my-second ["hello" "this is second"])
 
+;; 结构同样可以用来结构很多参数，同样支持&
 (defn chooser
   [[first-choice second-choice & unimportant-choices]]
   (println (str "Your first choice is: " first-choice))
@@ -167,8 +187,13 @@
                 "Here they are in case you need to cry over them: "
                 (clojure.string/join ", " unimportant-choices))))
 
+(doc my-first)
+(doc clojure.string/join)
 (chooser ["Marmalade", "Handsome Jack", "Pigpen", "Aquaman"])
 
+;; 如果要解构map，那么就要用map的形式来作为解构参数
+;; 对于map的解构，解构的是对应的key的值
+;; 将:lat的值解构到lat里面，同样将:lng的值解构到lng里面
 (defn announce-treasure-location
   [{lat :lat lng :lng}]
   (println (str "Treasure lat: " lat))
@@ -178,12 +203,17 @@
 (:lat {:lat 28.22 })
 
 
+;; 一种更简单的解构map的方式
 (defn announce-treasure-location
   [{:keys [lat lng]}]
   (println (str "Treasure lat: " lat))
   (println (str "Treasure lng: " lng)))
 (announce-treasure-location {:lat 28.22 :lng 81.33})
 
+
+
+
+;; 解构的同时保留原来的map
 ;; (defn receive-treasure-location
 ;;   [{:keys [lat lng] :as treasure-location}]
 ;;   (println (str "Treasure lat: " lat))
@@ -191,9 +221,12 @@
 ;;   ;; One would assume that this would put in new coordinates for your ship
 ;;   (steer-ship! treasure-location))
 
+
 ;; 关于解构的理解
 ;; 参考这里https://wizardforcel.gitbooks.io/clojure-fpftj/content/26.html
 ;; http://blog.csdn.net/lord_is_layuping/article/details/47061287
+;; https://clojure.org/guides/destructuring
+
 (defn summer-sales-percentage
   ;; The keywords below indicate the keys whose values
   ;; should be extracted by destructuring.
@@ -203,21 +236,28 @@
   (let [summer-sales (+ june july august)
         all-sales (apply + (vals all))]
     (/ summer-sales all-sales)))
+
 (def sales {
             :january   100 :february 200 :march      0 :april    300
             :may       200 :june     100 :july     400 :august   500
             :september 200 :october  300 :november 400 :december 600})
-
-(summer-sales-percentage sales) ; ratio reduced from 1000/3300 -> 10/33
+;; ratio reduced from 1000/3300 -> 10/33
+(summer-sales-percentage sales)
 
 ;; 从上面可以看出，解构只用在函数或者宏的参数里面或者是let变量里面
-;; 向量、map都可以用来解构
+;; 向量、list、map都可以用来解构
 ;; 向量依次解构里面每个元素
 ;; map依次解构里面的key
 
 
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 匿名函数
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 匿名函数，可以不需要名字的函数
 ;; 匿名函数对于那些只在一个地方使用的函数比较有用
+
+;; 通过fn来定义匿名函数
 (def years [1940 1944 1961 1985 1987])
 (filter (fn [year] (even? year)) years) ; long way w/ named arguments -> (1940 1944)
 (filter #(even? %) years) ; short way where % refers to the argument
@@ -242,12 +282,14 @@
 (* 3 8)
 ;; 将这个函数调用转成紧凑匿名函数
 #(* % 8)
-;; %为占位符，标识参数，如果有多个参数的时候，那么用%1, %2来表示, %就表示%1, %&表示可以参数的剩余参数
+;; %为占位符，标识参数，如果有多个参数的时候，那么用%1, %2来表示,
+;; %就表示%1, %&表示可以参数的剩余参数
 (#(str %1 " and " %2) "cornbread" "butter beans")
 
 (#(identity %&) 1 "blarg" :yip)
 
-;; 不过还是用fn的方式来定义函数比较直观，这种紧凑的方法看起来太费事
+;; 不过还是用fn的方式来定义函数比较直观，
+;; 这种紧凑的方法看起来太费事，太难看了，如果函数特别短，例如就一行，那么用这种紧凑的可以
 
 
 ;; 函数返回函数
