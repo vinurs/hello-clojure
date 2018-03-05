@@ -10,5 +10,6 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!")
-  (basic/follow-the-rabbit))
+  (println "Hello, World!" args)
+  ;; (basic/follow-the-rabbit)
+  )

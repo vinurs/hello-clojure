@@ -30,17 +30,17 @@
 great-baby-name
 
 
-(defn my-sum
-  ([vals] (sum vals 0))
+;; (defn my-sum
+;;   ([vals] (sum vals 0))
 
-  ([vals accumulating-total]
-   (if (empty? vals)
-     accumulating-total
-     (my-sum (rest vals) (+ (first vals) accumulating-total)))))
-(sum [39 5 1]) ; single-arity body calls two-arity body
-(sum [39 5 1] 0)
-(sum [5 1] 39)
-(sum [1] 44)
-(sum [] 45) ; base case is reached, so return accumulating-total
-                                        ; => 45
-()
+;;   ([vals accumulating-total]
+;;    (if (empty? vals)
+;;      accumulating-total
+;;      (my-sum (rest vals) (+ (first vals) accumulating-total)))))
+;; (sum [39 5 1]) ; single-arity body calls two-arity body
+;; (sum [39 5 1] 0)
+;; (sum [5 1] 39)
+;; (sum [1] 44)
+;; (sum [] 45) ; base case is reached, so return accumulating-total
+;;                                         ; => 45
+;; ()

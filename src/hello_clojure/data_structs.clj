@@ -82,7 +82,7 @@
 
 ;; 另外一种查找字典里面的key的方法，就是可以直接将这个字典当做函数来看待，参数就跟get一样，可以一个可以两个
 ;; 不过这种方法知道就好，用起来破坏了语法的美感啊
-({:name "The Human Coffeepot"} :name 1 2)
+;; ({:name "The Human Coffeepot"} :name 1 2)
 
 ;; 嵌套查找，查找字典里面的字典的key对应的值
 (get-in {:a 0 :b {:c "ho hum"}} [:b :c])

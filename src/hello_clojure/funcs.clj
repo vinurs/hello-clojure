@@ -145,7 +145,8 @@
 (println (parting)) ; -> Goodbye, World
 (println (parting "Mark")) ; -> Goodbye, Mark
 (println (parting "Mark" "es")) ; -> Adios, Mark
-(println (parting "Mark", "xy"))
+
+;; (println (parting "Mark", "xy"))
 ;; -> java.lang.IllegalArgumentException: unsupported language xy
 
 ;; Return the first element of a collection

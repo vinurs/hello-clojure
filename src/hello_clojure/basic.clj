@@ -6,6 +6,9 @@
   (:import (java.net InetAddress))
   (:gen-class))
 
+
+;; 返回当前的namespace的字符串名字
+(ns-name *ns*)
 ;; 类似java，文件名用下划线，命名空间用横线
 
 ;; 这个是单行注释
@@ -377,6 +380,7 @@ developer
 (defn follow-the-rabbit []
   (println "Off we go!")
   )
+
 follow-the-rabbit
 ;; (follow-the-rabbit)
 
@@ -582,7 +586,6 @@ fav-food
 ;; 快捷方式
 (String. "Hi!")
 
-(fn )
 ;; 调用java的方法
 (InetAddress/getByName "localhost")
 
