@@ -30,55 +30,7 @@
 
 ;; 最基本的运行方式，读取-计算-打印-循环
 ;; 基本类型
-;; 整数
-1
-42
--14
 
-;; 小数
-12.43
-
-;; 分数
-1/3
-;; 分数表示法只能针对整数，对小数就会出错
-;; 4.0/2
-;; 有公约数的分数会自行处理
-4/2
-
-;; 有小数的除法，结果会是小数
-(/ 1 3.0)
-(/ 3.0 7)
-
-;; 整数相除，除不尽的话会用分数来表示，除得尽就是整数
-(/ 7 3)
-(/ 2 4)
-(/ 6 3)
-(/ 6 4)
-
-1
-"a string"
-["a" "vector" "of" "string"]
-
-(+ 1 2 3)
-(str "It was the panda " "in the library " "with a dust buster")
-
-;; 字符串
-"jam"
-
-;; 字符
-\j
-\[
-
-;; 关键字
-:jam
-
-
-;; 布尔值
-true
-false
-
-;; 表示缺失值
-nil
 
 ;; 函数调用
 (+ 1 1)
@@ -86,11 +38,6 @@ nil
 
 ;; 变量
 ;; Clojure里面是不支持变量的。它跟变量有点像，但是在被赋值之前是不允许改的，包括：全局binding, 线程本地(thread local)binding， 以及函数内的本地binding， 以及一个表达式内部的binding。
-;; def定义全局bindings
-(def hello-vinurs "hello ,vinurs")
-hello-vinurs
-;; ::用来引用当前命名空间的关键字
-::hello-vinurs
 ;; def除了定义全局binding，还可以用来修改bindings
 
 ;; 函数的参数是只在这个函数内可见的本地binding
@@ -267,39 +214,6 @@ less-stooges
 (conj [:toast :butter] :jam)
 (conj [:toast :butter] [1 2])
 
-
-;; map, key-value形式的容器，是不是有点类似redis了
-{:jam1 "strawberry" :jam2 "blackberry"}
-;; map的key-value必须一一配对，否则会抛出异常
-;; {:jam1 "strawberry" :jam2 }
-;; map里面是不许有相同的key的
-;; {:jam1 "hello" :jam1 "world"}
-
-;; 获取map中某一个key的值
-(get {:jam1 "strawberry" :jam2 "blackberry"} :jam2 )
-;; 没有这key就返回nil
-(get {:jam1 "strawberry" :jam2 "blackberry"} :jam3)
-;; 没有这个key的时候自定义一个返回值
-(get {:jam1 "strawberry" :jam2 "blackberry"} :jam3 "not found vinurs")
-
-;; 直接使用key的值来调用函数，不过这样代码的可读性感觉差了，还是显式调用get比较好
-(:jam2 {:jam1 "strawberry" :jam2 "blackberry"} "not found vinurs")
-(:jam3 {:jam1 "strawberry" :jam2 "blackberry"} "not found vinurs")
-
-;; 用keys、vals返回map中的所有key或者value
-(keys {:jam1 "strawberry" :jam2 "blackberry" :jam3 "marmalade"})
-(keys {:jam1 "strawberry" :jam2 "blackberry" "hello" "marmalade"})
-(vals {:jam1 "strawberry" :jam2 "blackberry" :jam3 "marmalade"})
-
-;; 更新map里面的值
-(assoc {:jam1 "red" :jam2 "black"} :jam1 "orange")
-;; 移除一个映射
-(dissoc {:jam1 "red" :jam2 "black"} :jam1)
-
-;; 合并两个map，如果有相同的key，那么后一个会覆盖前一个
-(merge {:jam1 "red" :jam2 "black"}
-       {:jam1 "orange" :jam3 "red"}
-       {:jam4 "blue" :jam1 "blue"})
 
 
 ;; 集合，存储唯一的数据值，数据值不能重复
