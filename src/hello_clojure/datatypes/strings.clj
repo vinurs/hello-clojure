@@ -11,8 +11,8 @@
 "\"Great cow of Moscow!\" - Hermes Conrad"
 
 
-(def name "Chewbacca")
-(str "\"Uggllglglglglglglglll\" - " name)
+(def my-name "Chewbacca")
+(str "\"Uggllglglglglglglglll\" - " my-name)
 ;; => "Uggllglglglglglglglll" - Chewbacca
 
 

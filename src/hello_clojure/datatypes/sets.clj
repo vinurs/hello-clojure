@@ -1,4 +1,7 @@
-(ns hello-clojure.datatypes.sets)
+(ns hello-clojure.datatypes.sets
+  (:require [clojure.repl :as r :refer [doc]]
+            [clojure.set])
+  )
 
 
 
@@ -11,12 +14,14 @@
 
 ;; 通过函数创建集合
 (hash-set 1 1 2 2)
+
 ;; 向集合里面增加一个已经存在的值是加不进去的
 (conj #{:a :b} :b)
+;; => #{:a :b}
 
 (hash-set [1 1 2 3] [2 2 45])
 
-(doc set)
+
 ;; 从向量创建集合
 (set [3 3 3 4 4])
 
@@ -46,12 +51,15 @@
 (contains? #{:a :b} 3)
 (contains? #{nil} nil)
 
+
 ;; 通过关键字对集合进行操作
 (:a #{:a :b} "bb")
 (:d #{:a :b} "bb")
 
 (get #{:a :b} :a)
 (get #{:a :b} "kurt vonnegut")
+
+
 
 ;; 如果不存在，返回一个默认的返回值
 (get #{:a :b} "kurt vonnegut" "hhhh")

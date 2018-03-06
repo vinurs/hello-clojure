@@ -1,4 +1,4 @@
-(ns hello-clojure.abstraction.programming-abstraction)
+(ns hello-clojure.abstractions.programming-abstraction)
 
 
 (defn titleize
