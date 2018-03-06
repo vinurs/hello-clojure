@@ -61,3 +61,50 @@
 (get #{:a nil} nil)
 ;; => true
 (contains? #{:a nil} nil)
+
+;; 集合，存储唯一的数据值，数据值不能重复
+#{:red :blue :white :pink}
+;; 集合在创建的时候是不允许有重复的
+;; #{:red :blue :white :pink :pink}
+
+
+;; 对集合可以做下面的操作：并集、差集、交集
+;; 并集
+(clojure.set/union #{:r :b :w} #{:w :p :y})
+;; 从第一个集合里面减去跟第二个合集里面相同的元素
+(clojure.set/difference #{:r :b :w} #{:w :p :y})
+;; 交集
+(clojure.set/intersection #{:r :b :w} #{:w :p :y})
+
+;; 通过set将其它类型的容器转成集合
+(set [:rabbit :rabbit :watch :door])
+(set '(1 1 2))
+(set {1 2 3 4})
+
+;; 通过get查看一个元素是否在一个集合里面
+(get #{1 2 3 4} 5)
+(get #{1 2 3 4} 1)
+;; 如果元素是关键字，那么可以直接调用关键字，不过还是觉得get靠谱点
+(:rabbit #{ 1 2 3 :rabbit})
+;; 集合本身也可以作为函数来查看一个元素是否在集合里面
+(#{1 2 3 4} 2)
+(#{1 2 3 4} 0)
+;; 通过contains?函数来查看一个元素是否在集合里面
+(contains? #{:rabbit :door :watch} :rabbit)
+(contains? #{:rabbit :door :watch} :jam)
+
+;; 给集合增加元素
+(conj #{:rabbit :door} :jam)
+(conj #{:rabbit :door} :door)
+;; 移除集合中的某个元素
+(disj #{:rabbit :door :jam} :door)
+
+
+;; 所有的容器都是不可变且持久化，意味着容器里面的内容是不会改变了，
+;; 我们的对容器的所有的操作返回的都是这个结构的的一个新版本，通过下面的函数就可以看出来了
+
+(def hello {:jam1 "red" :jam2 "black"})
+hello
+::hello
+(dissoc hello :jam1)
+hello

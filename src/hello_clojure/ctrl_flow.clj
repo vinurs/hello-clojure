@@ -245,3 +245,93 @@ x
       (recur (+ sum x) (dec x)) ;; Jump to recursion target
       sum)))
 (sum-down-from 10)
+
+
+;; 逻辑值
+;; clojure里面的true跟false就是java里面的boolen类型
+(class true)
+(class false)
+
+;; 如果一个函数返回boolen值，那么起名的时候最好就以问号结尾
+(true? true)
+(true? false)
+(false? false)
+(false? true)
+(nil? nil)
+(nil? 1)
+
+(not true)
+(not false)
+(not 1)
+(not nil)
+(not "hi")
+
+(= :drinkme :drinkme)
+(= :drinkme 4)
+
+(= '(:drinkme :bottle) [:drinkme :bottle])
+(not= :drinkme 4)
+
+
+;; 流控制
+(if true "it is true"
+    ;; else
+    "it is false")
+
+(if false "it is true"
+    ;; else
+    "it is false")
+
+(if nil "it is true"
+    ;; else
+    "it is false")
+
+(if 1 "it is true"
+    ;; else
+    "it is false")
+(if '() "it is true"
+    ;; else
+    "it is false")
+;; 所以只有nil跟false是false
+
+(if (= :drinkme :drinkme)
+  "Try it"
+  "Dont't try it")
+
+
+(let [need-to-grow-small (> 5 3)]
+  (if need-to-grow-small
+    "drink bottle"
+    "don't drink bottle"))
+
+;; 将一个boolen绑定到一个符号，如果为真，那么执行第一条语句；否则执行第二条语句
+(if-let [need-to-grow-small (> 5 3)]
+  "drink bottle"
+  "don't drink bottle")
+
+;; when，当一个条件为真的时候才执行下面的语句
+(defn drink [need-to-grow-small]
+  (when need-to-grow-small
+    "drink bottle"))
+(drink true)
+(drink nil)
+
+(when-let [need-to-grow-small true]
+  "drink bottle")
+(when-let [need-to-grow-small false]
+  "drink bottle")
+
+;; cond测试更多的条件，一旦一个测试返回true，其它的测试子句都不会被尝试
+(let [bottle "drinkme"]
+  (cond
+    (= bottle "poison") "don't touch"
+    (= bottle "drinkme") "grow smaller"
+    (= bottle "empty") "all gone"))
+
+
+(let [x 2]
+  (cond
+    (> x 10) "bigger than 10"
+    (> x 4) "bigger than 4"
+    (> x 3) "bigger than 3"
+    :else "< 3"))
