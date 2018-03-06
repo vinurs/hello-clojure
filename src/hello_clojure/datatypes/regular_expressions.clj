@@ -1,4 +1,4 @@
-(ns hello-clojure.regular-expressions)
+(ns hello-clojure.datatypes.regular-expressions)
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 正则表达式
