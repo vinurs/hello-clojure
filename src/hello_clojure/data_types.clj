@@ -1,9 +1,9 @@
-(ns hello-clojure.data-structs
+(ns hello-clojure.data-types
   (:require [clojure.repl :as r :refer [doc]]
             [clojure.set]))
 
 
-;; clojure基本数据解构
+;; clojure基本数据类型
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -14,6 +14,40 @@
 93
 1.2
 1/3
+
+(def clueless 9)
+(class clueless)
+;;=> java.lang.Long
+(class (+ clueless 9000000000000000))
+;;=> java.lang.Long
+(class (+ clueless 90000000000000000000))
+;;=> clojure.lang.BigInt
+
+(class (+ clueless 9.0))
+;;=> java.lang.Double
+
+;; 溢出，上溢
+;; (+ Long/MAX_VALUE Long/MAX_VALUE)
+;;=> java.lang.ArithmeticException: integer overflow
+
+(unchecked-add (Long/MAX_VALUE) (Long/MAX_VALUE))
+;;=> -2
+
+;; 下溢
+(float 0.0000000000000000000000000000000000000000000001)
+;;=> 0.0
+1.0E-430
+;;=> 0.0
+
+(def a (rationalize 1.0e50))
+(def b (rationalize -1.0e50))
+(def c (rationalize 17.0e00))
+
+(+ (+ a b) c)
+;;=> 17N
+
+(+ a (+ b c))
+;;=> 17N
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 字符串

@@ -591,3 +591,70 @@ fav-food
 
 (class 5)
 (class 28888888888888888888888888888888888888888)
+
+
+;; 斐波那契数列
+(defn fib
+  [n] (cond
+        (= n 0) 0
+        (= n 1) 1
+        :else (+ (fib (- n 1))
+                 (fib (- n 2)))))
+
+(println "hi")
+(time (fib 42))
+"Elapsed time: 11184.49583 msecs" 267914296
+
+
+(def memoized-fib
+  (memoize
+   (fn [n] (cond
+             (= n 0) 0
+             (= n 1) 1
+             :else (+ (fib (- n 1))
+                      (fib (- n 2)))))))
+(time (memoized-fib 42))
+(time (memoized-fib 42))
+
+(defn factorial
+  [n] (if (= n 1)
+        1
+        (* n (factorial (- n 1)))))
+
+(factorial 6)
+(* 6 (factorial 5))
+(* 6 (* 5 (factorial 4)))
+
+
+;; recur可以很好地来实现尾递归
+;; 用尾递归来实现
+(defn factorial2
+  [n]
+  (loop [count n
+         acc 1]
+    (if (zero? count) acc
+        (recur (dec count) (* acc count)))))
+(factorial2 6)
+
+
+(declare my-odd? my-even?)
+
+(defn my-odd?
+  [n]
+  (if (= n 0) false
+      (my-even? (dec n))))
+(defn my-even?
+  [n] (if (= n 0)
+        true
+        (my-odd? (dec n))))
+
+(declare my-odd? my-even?)
+(defn my-odd?
+  [n] (if (= n 0)
+        false
+        #(my-even? (dec n))))
+
+;; (defn my-even?
+;;   [n]
+;;   (if (= n 0) true
+;;       *(my-odd? (dec n))))

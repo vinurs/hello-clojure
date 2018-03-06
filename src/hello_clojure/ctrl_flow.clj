@@ -191,6 +191,8 @@
     (recur (inc iteration))))
 
 ;; loop跟recur配合起来使用就类似于定义了一个函数，然后递归调用这个函数
+;; recur总是会跳转到最近的loop或者fn或者defn
+;; recur最好跟尾递归结合，要不然很容易就出现栈溢出的问题
 ;; 比如下面的定义，就类似一个循环
 (defn recursive-printer
   ([]
@@ -221,5 +223,25 @@
 (Example)
 x
 
+;; 尾递归
+(defn print-down-from [x]
+  (when (pos? x)
+    (println x)
+    (recur (dec x))))
+(print-down-from 10)
 
-;; 递归
+(defn sum-down-from
+  [sum x]
+  (if (pos? x)
+    (recur (+ sum x) (dec x))
+    sum))
+(sum-down-from 0 10)
+
+
+(defn sum-down-from
+  [initial-x]
+  (loop [sum 0, x initial-x] ;; Set up recursion target
+    (if (pos? x)
+      (recur (+ sum x) (dec x)) ;; Jump to recursion target
+      sum)))
+(sum-down-from 10)
