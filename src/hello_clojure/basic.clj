@@ -310,7 +310,7 @@ fav-food
                  (fib (- n 2)))))
 
 (println "hi")
-(time (fib 42))
+;; (time (fib 42))
 "Elapsed time: 11184.49583 msecs" 267914296
 
 
@@ -321,8 +321,8 @@ fav-food
              (= n 1) 1
              :else (+ (fib (- n 1))
                       (fib (- n 2)))))))
-(time (memoized-fib 42))
-(time (memoized-fib 42))
+;; (time (memoized-fib 42))
+;; (time (memoized-fib 42))
 
 (defn factorial
   [n] (if (= n 1)

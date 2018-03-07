@@ -200,17 +200,17 @@
   (first (filter vampire?
                  (map vampire-related-details social-security-numbers))))
 
-(time (vampire-related-details 0))
+;; (time (vampire-related-details 0))
 ;; => "Elapsed time: 1001.042 msecs"
 ;; => {:name "McFishwich", :makes-blood-puns? false, :has-pulse? true}
 
 ;; 惰性求值
-(time (def mapped-details (map vampire-related-details (range 0 1000000))))
+;; (time (def mapped-details (map vampire-related-details (range 0 1000000))))
 
-(time (first mapped-details))
+;; (time (first mapped-details))
 
 
-(time (identify-vampire (range 0 1000000)))
+;; (time (identify-vampire (range 0 1000000)))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Infinite Sequences

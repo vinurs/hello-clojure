@@ -27,7 +27,7 @@
 (fib 5)
 
 ;; 计算42就很慢了
-(time (fib 42))
+;; (time (fib 42))
 ;; "Elapsed time: 96966.967774 msecs"
 ;; 267914296
 
@@ -42,19 +42,19 @@
                         (fib (- n 2)))))))
 
 ;; 通过memoize函数重新定义以后再次执行这个函数
-(time (memoized-fib 42))
+;; (time (memoized-fib 42))
 ;; "Elapsed time: 91793.464344 msecs"
 
 ;; 再次执行这个就很快了
-(time (memoized-fib 42))
+;; (time (memoized-fib 42))
 ;; "Elapsed time: 0.048753 msecs"
 
 ;; 换个数求也很快
-(time (memoized-fib 21))
+;; (time (memoized-fib 21))
 ;; "Elapsed time: 8.401496 msecs"
 
 ;; 43没求过，所以不会被缓存，比较慢
-(time (memoized-fib 43))
+;; (time (memoized-fib 43))
 ;; "Elapsed time: 152303.74089 msecs"
 
 
@@ -96,19 +96,19 @@
     (my-odd? (dec n))))
 
 
-(declare my-odd? my-even?)
-(defn my-odd? [n]
-  (if (= n 0)
-    false
-    #(my-even? (dec n))))
+;; (declare my-odd? my-even?)
+;; (defn my-odd? [n]
+;;   (if (= n 0)
+;;     false
+;;     #(my-even? (dec n))))
 
-(defn my-even? [n]
-  (if (= n 0)
-    true
-    *(my-odd? (dec n))))
+;; (defn my-even? [n]
+;;   (if (= n 0)
+;;     true
+;;     *(my-odd? (dec n))))
 
-;; TODO: 通过这个可以防止栈溢出
-(trampoline my-even? 42)
+;; ;; TODO: 通过这个可以防止栈溢出
+;; (trampoline my-even? 42)
 ;; 不过这里有个问题，每次都要手动调用 trampoline函数，能不能自动呢？
 
 ;; 重新定义一下
