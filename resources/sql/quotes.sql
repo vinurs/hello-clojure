@@ -1,4 +1,4 @@
--- src/hello_clojure/db/sql/quotes.sql
+-- resources/sql/quotes.sql
 -- The Princess Bride Quotes
 
 -- :name create-quotes-table :!
