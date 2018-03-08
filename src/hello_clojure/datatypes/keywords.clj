@@ -29,9 +29,14 @@
 :a-keyword
 ;;=> :a-keyword
 
+;; 两个冒号开头表示当前namespace的关键字
 ::also-a-keyword
 ;;=> :hello-clojure.datatypes.keywords/also-a-keyword
 
+;; 如果要表示a命名空间里面的关键字hello，那么用下面的方法来实现
+;; (:a/hello)
+;; 而不是
+;; (hello/:a)
 
 ;; 关键字的求值就是他们自己
 

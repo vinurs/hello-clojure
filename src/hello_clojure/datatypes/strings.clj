@@ -6,6 +6,20 @@
 ;; 字符串
 "abc"
 
+(class \a)
+;; 特殊字符
+\space
+\newline
+\return
+
+;; 这个就是非法的
+;; \aaa
+
+
+;; 多行字符串
+"hello
+you are welcome"
+
 "Lord Voldemort"
 "\"He who must not be named\""
 "\"Great cow of Moscow!\" - Hermes Conrad"

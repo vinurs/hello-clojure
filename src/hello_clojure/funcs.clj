@@ -131,6 +131,7 @@
 
 
 ;; 一个函数可以有不同个数的参数
+;; 不同的参数的时候，每个函数体都要放在单独的括号里面
 (defn parting
   "returns a String parting in a given language"
   ([] (parting "World"))
@@ -196,64 +197,6 @@
 (doc clojure.string/join)
 (chooser ["Marmalade", "Handsome Jack", "Pigpen", "Aquaman"])
 
-;; 如果要解构map，那么就要用map的形式来作为解构参数
-;; 对于map的解构，解构的是对应的key的值
-;; 将:lat的值解构到lat里面，同样将:lng的值解构到lng里面
-(defn announce-treasure-location
-  [{lat :lat lng :lng}]
-  (println (str "Treasure lat: " lat))
-  (println (str "Treasure lng: " lng)))
-(announce-treasure-location {:lat 28.22 :lng 81.33})
-(announce-treasure-location {28.22 :lat :lng 81.33})
-(:lat {:lat 28.22 })
-
-
-;; 一种更简单的解构map的方式
-(defn announce-treasure-location
-  [{:keys [lat lng]}]
-  (println (str "Treasure lat: " lat))
-  (println (str "Treasure lng: " lng)))
-(announce-treasure-location {:lat 28.22 :lng 81.33})
-
-
-
-
-;; 解构的同时保留原来的map
-;; (defn receive-treasure-location
-;;   [{:keys [lat lng] :as treasure-location}]
-;;   (println (str "Treasure lat: " lat))
-;;   (println (str "Treasure lng: " lng))
-;;   ;; One would assume that this would put in new coordinates for your ship
-;;   (steer-ship! treasure-location))
-
-
-;; 关于解构的理解
-;; 参考这里https://wizardforcel.gitbooks.io/clojure-fpftj/content/26.html
-;; http://blog.csdn.net/lord_is_layuping/article/details/47061287
-;; https://clojure.org/guides/destructuring
-
-(defn summer-sales-percentage
-  ;; The keywords below indicate the keys whose values
-  ;; should be extracted by destructuring.
-  ;; The non-keywords are the local bindings
-  ;; into which the values are placed.
-  [{june :june july :july august :august :as all}]
-  (let [summer-sales (+ june july august)
-        all-sales (apply + (vals all))]
-    (/ summer-sales all-sales)))
-
-(def sales {
-            :january   100 :february 200 :march      0 :april    300
-            :may       200 :june     100 :july     400 :august   500
-            :september 200 :october  300 :november 400 :december 600})
-;; ratio reduced from 1000/3300 -> 10/33
-(summer-sales-percentage sales)
-
-;; 从上面可以看出，解构只用在函数或者宏的参数里面或者是let变量里面
-;; 向量、list、map都可以用来解构
-;; 向量依次解构里面每个元素
-;; map依次解构里面的key
-
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 匿名函数
@@ -274,6 +217,39 @@
 ;; 匿名函数的调用
 ((fn [x] (* x 3)) 8)
 
+(doc fn)
+
+;; fn定义的时候也是可以给函数名字的，通过这个可以实现递归调用
+(def strange-adder (fn add-self-reference
+                     ([x] (add-self-reference x 1))
+                     ([x y] (+ x y))))
+(strange-adder 1)
+(strange-adder 10 50)
+
+;; 自我引用的函数，我们很容易创建递归
+;; 但是有时候我们会定义相互引用的函数，那么我们如何来解决这个问题呢?
+;; 那么我们用letfn
+(letfn [(odd? [n]
+          (even? (dec n)))
+        (even? [n]
+          (or (zero? n)
+              (odd? (dec n))))]
+  (odd? 11))
+;; 可以看出，这个vector由多个函数体组成，只不过是fn被忽略掉了而已
+
+;; defn是基于fn定义的，可读性更好一点而已
+
+;; TODO: 对函数的参数进行检查，称为前置条件跟后置条件，这个也要学一下
+
+;; TODO: 函数字面量
+;; eval求值器
+(eval "(+ 1 2)")
+
+
+(map + '(1 2 3))
+(map + [1 2 3])
+
+
 (def my-special-multiplier
   (fn [x] (* x 3)))
 (my-special-multiplier 12)
@@ -281,7 +257,7 @@
 ;; 更紧凑的定义匿名函数的方法
 (#(* % 3) 8)
 (map #(str "Hi, " %)
-     ["Darth Vader" "Mr. Magoo"])
+["Darth Vader" "Mr. Magoo"])
 ;; 我们来看看紧凑的方法定义的步骤
 ;; 这是一个函数调用
 (* 3 8)
@@ -299,9 +275,9 @@
 
 ;; 函数返回函数
 (defn inc-maker
-  "Create a custom incrementor"
-  [inc-by]
-  #(+ % inc-by))
+"Create a custom incrementor"
+[inc-by]
+#(+ % inc-by))
 
 (def inc3 (inc-maker 3))
 (inc3 7)

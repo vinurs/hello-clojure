@@ -5,9 +5,13 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(def my-line [[5 10] [10 20]])
+
+;; 为什么需要解构呢?
+;; 因为我们的参数一般都是map、vector、list之类的，我们需要取里面的某个位置的值
+;; 手动做太麻烦，如果能自动做就更好了，这就有了解构
 
 ;; 手动解构，用函数来获取每一个collection里面的值
+(def my-line [[5 10] [10 20]])
 (let [p1 (first my-line)
       p2 (second my-line)
       x1 (first p1)
@@ -22,6 +26,7 @@
       [x2 y2] p2]
   (println "Line from (" x1 "," y1 ") to (" x2 ", " y2 ")"))
 
+;; 这个对于一级collection效果还不明显，如果collection是嵌套的，那么这个好处就显而易见了
 
 ;; 对list/vector解构用[]
 ;; 对map解构用{}
@@ -323,3 +328,198 @@
 ;;= You can reach him at 555-555-5555
 ;;= He lives at 452 Lisp Ln. Macroville Kentucky 81321
 ;;= Maybe you can write to him about running or hiking
+
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 支持解构的地方有: let/defn/fn/loop
+;; 解构有两种：顺序解构/map解构
+;; 顺序解构: list/vector/seq/map/java数组/字符串
+;; map解构: map
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def v [42 "foo" 99.2 [5 12]])
+(let [[x y z] v]
+  (+ x z))
+
+;; 嵌套解构
+(let [[x _ _ [y z]] v]
+  (+ x y z))
+
+;; 除了依次解构完成，还支持剩余的概念
+(let [[x & rest] v]
+  rest)
+;; 剩余的被组成了一个list
+
+;; 解构的同时还要保持之前的值完好，同样绑定到一个本地绑定
+(let [[x _ z & rest :as original-vector] v]
+  (conj original-vector (+ x z)))
+
+
+;; map解构
+(def m {:a 5 :b 6
+        :c [7 8 9]
+        :d {:e 10 :f 11}
+        "foo" 88
+        42 false})
+(let [{a :a b :b} m]
+  (+ a b))
+
+(let [{f "foo"} m]
+  (+ f 12))
+
+(let [{v 42} m]
+  (if v 1 0))
+
+
+;; 如果用map解构来解构数组、字符串的话，那么解析的key就是数组的下标
+(let [{x 3 y 8} [12 0 0 -18 44 6 0 0 1]]
+  (+ x y))
+
+;; 不能用map解构列表
+;; (let [{x 3 y 8} '(12 0 0 -18 44 6 0 0 1)]
+;;   (+ x y))
+
+;; map嵌套解构
+(let [{{e :e} :d} m]
+  (* 2 e))
+
+;; 顺序解构跟map解构相结合
+(let [{[a b c] :c} m]
+  (* a b c))
+
+(def map-in-vector ["james" {:birthday "1987-09-06"}])
+(let [[name {bd :birthday}] map-in-vector]
+  (str name "was born on " bd))
+
+;; 解构的同时保持原来的值
+(let [{r1 :x r2 :y :as randoms}
+      (zipmap [:x :y :z] (repeatedly (partial rand-int 10)))]
+  (assoc randoms :sum (+ r1 r2)))
+
+;; 如果map里面没有对应的key，那么我们可以用:or来给一个默认值
+(let [{k :unknown x :a
+       :or {k 50}} m]
+  (+ k x))
+
+;; 上面的代码还需要简化
+(let [{k :unknown x :a} m
+      k (or k 50)]
+  (+ k x))
+
+
+;; or能区分一个bind到底有没有值
+(let [{opt1 :option} {:option false}
+      opt1 (or opt1 true)
+      {opt2 :option :or {opt2 true}} {:option false}]
+  {:opt1 opt1 :opt2 opt2})
+
+;; 如果map里面的key都是用的clojure的关键字类型的话，那么我们在解构的时候可以简化
+;; 例如下面，可以看出每个关键字我们都写了两遍
+(def chas {:name "chas" :age 31 :location "massachuets"})
+(let [{name :name age :age location :location} chas]
+  (format "%s is %s years old, and live in %s." name age location))
+
+;; 进行简化，用:keys来表示里面的同名的key
+(let [{:keys [name age location]} chas]
+  (format "%s is %s years old, and live in %s." name age location))
+
+;; 由于clojure里面的key可以是任意类型，所以除了关键字类型，还可以是string类型
+;; 如下
+(def christophe {"name" "chirosto" "age" 31 "location" "british hello"})
+(let [{:strs [name age location]} christophe]
+  (format "%s is %s years old, and live in %s." name age location))
+
+
+;; 如果key是符号类型，那么我们可以通过:syms来进行调用
+(def christophe {'name "chirosto" 'age 31 'location "british hello"})
+(let [{:syms [name age location]} christophe]
+  (format "%s is %s years old, and live in %s." name age location))
+
+;; 当然，一般我们map里面的key更习惯用clojure的关键字类型
+;; 所以:keys用得比较多
+
+
+;; 我们还可以对顺序集合的声誉部分使用map解构来进行操作
+(def user-info ["robbrt" 2011 :name "Bob" :city "boston"])
+(let [[username  account-year & extra-info] user-info
+      {:keys [name city]} (apply hash-map extra-info)]
+  (format "%s is in %s" name city))
+
+;; 如果剩余个数是奇数呢，那么下面的代码就会出错，就是hash-map会出错
+;; (def user-info ["robbrt" 2011 :name "Bob" :city "boston" 1])
+;; (let [[username  account-year & extra-info] user-info
+;;       {:keys [name city]} (apply hash-map extra-info)]
+;;   (format "%s is in %s" name city))
+
+;; hash-map遇到奇数会出错
+;; (hash-map 1 2 3 )
+
+;; 如果是偶数，那么就可以直接让他当做map来处理
+(def user-info ["robbrt" 2011 :name "Bob" :city "boston"])
+(let [[username  account-year & {:keys [name city]}] user-info]
+  (format "%s is in %s" name city))
+
+;; 同样的，如果是奇数个，就会出错
+;; (def user-info ["robbrt" 2011 :name "Bob" :city "boston" 1])
+;; (let [[username  account-year & {:keys [name city]}] user-info]
+;;   (format "%s is in %s" name city))
+
+
+;; 如果要解构map，那么就要用map的形式来作为解构参数
+;; 对于map的解构，解构的是对应的key的值
+;; 将:lat的值解构到lat里面，同样将:lng的值解构到lng里面
+(defn announce-treasure-location
+  [{lat :lat lng :lng}]
+  (println (str "Treasure lat: " lat))
+  (println (str "Treasure lng: " lng)))
+(announce-treasure-location {:lat 28.22 :lng 81.33})
+(announce-treasure-location {28.22 :lat :lng 81.33})
+(:lat {:lat 28.22 })
+
+
+;; 一种更简单的解构map的方式
+(defn announce-treasure-location
+  [{:keys [lat lng]}]
+  (println (str "Treasure lat: " lat))
+  (println (str "Treasure lng: " lng)))
+(announce-treasure-location {:lat 28.22 :lng 81.33})
+
+
+
+
+;; 解构的同时保留原来的map
+;; (defn receive-treasure-location
+;;   [{:keys [lat lng] :as treasure-location}]
+;;   (println (str "Treasure lat: " lat))
+;;   (println (str "Treasure lng: " lng))
+;;   ;; One would assume that this would put in new coordinates for your ship
+;;   (steer-ship! treasure-location))
+
+
+;; 关于解构的理解
+;; 参考这里https://wizardforcel.gitbooks.io/clojure-fpftj/content/26.html
+;; http://blog.csdn.net/lord_is_layuping/article/details/47061287
+;; https://clojure.org/guides/destructuring
+
+(defn summer-sales-percentage
+  ;; The keywords below indicate the keys whose values
+  ;; should be extracted by destructuring.
+  ;; The non-keywords are the local bindings
+  ;; into which the values are placed.
+  [{june :june july :july august :august :as all}]
+  (let [summer-sales (+ june july august)
+        all-sales (apply + (vals all))]
+    (/ summer-sales all-sales)))
+
+(def sales {
+            :january   100 :february 200 :march      0 :april    300
+            :may       200 :june     100 :july     400 :august   500
+            :september 200 :october  300 :november 400 :december 600})
+;; ratio reduced from 1000/3300 -> 10/33
+(summer-sales-percentage sales)
+
+;; 从上面可以看出，解构只用在函数或者宏的参数里面或者是let变量里面
+;; 向量、list、map都可以用来解构
+;; 向量依次解构里面每个元素
+;; map依次解构里面的key
