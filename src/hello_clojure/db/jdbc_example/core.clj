@@ -1,4 +1,4 @@
-(ns hello-clojure.db.basic
+(ns hello-clojure.db.jdbc-example.core
   (:require [clojure.java.jdbc :as j])
   )
 

@@ -1,4 +1,4 @@
-;; (ns hello-colojure.db.characters
+;; (ns hello-colojure.db.hugsql_example.characters
 ;;   (:require [hugsql.core :as hugsql]))
 
 ;; The path is relative to the classpath (not proj dir!),
