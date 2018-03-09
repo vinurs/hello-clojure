@@ -5,6 +5,7 @@
 ;; 并发，多线程
 
 *ns*
+
 ;; 创建原子，初始值为:caterpillar
 (def who-atom (atom :caterpillar))
 @who-atom
