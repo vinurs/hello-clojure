@@ -1,4 +1,4 @@
-(ns hello-clojure.concurrency.atom)
+(ns hello-clojure.concurrency.atoms)
 
 ;; atom, 原子类型
 @(atom 12)
