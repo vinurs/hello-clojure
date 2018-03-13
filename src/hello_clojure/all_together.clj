@@ -5,7 +5,7 @@
   (:gen-class))
 
 
-;; 定义了人体部位的左侧
+;; 定义了人体各个部位，仅仅包含左侧
 (def asym-hobbit-body-parts [{:name "head" :size 3}
                              {:name "left-eye" :size 1}
                              {:name "left-ear" :size 1}
@@ -44,8 +44,10 @@
     (if (empty? remaining-asym-parts)
       final-body-parts
       (let [[part & remaining] remaining-asym-parts]
+        ;; 进入最近的loop
         (recur remaining
                (into final-body-parts
+                     ;; 合并新建立的到final-body-parts里面去
                      (set [part (matching-part part)])))))))
 
 (symmetrize-body-parts asym-hobbit-body-parts)
@@ -125,6 +127,7 @@ x
   "Expects a seq of maps that have a :name and :size"
   [asym-body-parts]
   (reduce (fn [final-body-parts part]
-            (into final-body-parts (set [part (matching-part part)])))
+            (into final-body-parts
+                  (set [part (matching-part part)])))
           []
           asym-body-parts))

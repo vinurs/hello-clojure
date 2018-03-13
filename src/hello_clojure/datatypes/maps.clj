@@ -57,6 +57,7 @@
 
 ;; 嵌套查找，查找字典里面的字典的key对应的值
 (get-in {:a 0 :b {:c "ho hum"}} [:b :c])
+;; 更深入地嵌套，就是用vector来表示嵌套
 (get-in {:a 0 :b {:c {:d "this is d"}}} [:b :c :d])
 
 

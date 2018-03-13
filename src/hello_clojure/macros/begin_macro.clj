@@ -8,6 +8,7 @@
 (backwards (" backwards" " am" "I" str))
 
 
+
 ;; 对宏进行展开
 (macroexpand '(when boolean-expression
                 expression-1
@@ -69,3 +70,8 @@
 (code-critic (1 + 1) (+ 1 1))
 
 (def message "Good job!")
+
+(list? '(1 2))
+(read-string "#(+ 1 %)")
+
+(read-string "@var")

@@ -1,4 +1,4 @@
-(ns hello-clojure.functional-programming
+(ns hello-clojure.functional-programming.core
   ;; 导入clojure.set库
   (:require [clojure.set])
   )
