@@ -1,5 +1,6 @@
 (ns hello-clojure.main
-  (:require [hello-clojure.basic :as basic])
+  (:require [hello-clojure.basic :as basic]
+            [taoensso.timbre :as log])
 
   (:gen-class)
   )
@@ -10,6 +11,7 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
+  (log/info "hello")
   (println "Hello, World!" args)
   ;; (basic/follow-the-rabbit)
   )

@@ -6,6 +6,18 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
 
+                 ;; 日志
+                 [com.taoensso/timbre "4.10.0"]
+
+                 ;; logback框架
+                 [ch.qos.logback/logback-classic "1.1.2"]
+
+                 ;; SLF4J binding for Clojure's Timbre logging library
+                 [com.fzakaria/slf4j-timbre "0.3.8"]
+                 [org.slf4j/log4j-over-slf4j "1.7.14"]
+                 [org.slf4j/jul-to-slf4j "1.7.14"]
+                 [org.slf4j/jcl-over-slf4j "1.7.14"]
+
                  ;; 数据库
                  [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "5.1.45"]
