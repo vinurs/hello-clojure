@@ -9,8 +9,14 @@
                  ;; 数据库
                  [org.clojure/java.jdbc "0.7.5"]
                  [mysql/mysql-connector-java "5.1.45"]
-                 [com.layerware/hugsql "0.4.8"]
 
+                 ;; 连接池
+                 ;; [hikari-cp "2.2.0"]
+                 [hikari-cp "1.8.3"]
+                 [conman "0.7.6"]
+
+                 [com.layerware/hugsql "0.4.8"]
+                 [mount "0.1.12"]
                  ]
 
   ;; 主函数入口
