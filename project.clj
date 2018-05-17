@@ -20,14 +20,18 @@
 
                  ;; 数据库
                  [org.clojure/java.jdbc "0.7.5"]
+                 ;; mysql驱动
                  [mysql/mysql-connector-java "5.1.45"]
 
-                 ;; 连接池
-                 ;; [hikari-cp "2.2.0"]
-                 [hikari-cp "1.8.3"]
+                 ;; 数据库连接池
+                 ;; clojure封装的HikariCP JDBC连接池
+                 [hikari-cp "2.4.0"]
+                 ;; 在hikari-cp上面更进一步的封装，直接调用
                  [conman "0.7.6"]
 
+                 ;; 直接根据sql文件来生成函数，这个其实可以不用包含了，conman里面应该已经有了
                  [com.layerware/hugsql "0.4.8"]
+
                  [mount "0.1.12"]
                  ]
 
