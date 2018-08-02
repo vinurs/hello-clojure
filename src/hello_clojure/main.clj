@@ -1,11 +1,9 @@
 (ns hello-clojure.main
   (:require [hello-clojure.basic :as basic]
             [taoensso.timbre :as log]
-            [taoensso.timbre.appenders.core :as appenders]
-            )
+            [taoensso.timbre.appenders.core :as appenders])
 
-  (:gen-class)
-  )
+  (:gen-class))
 
 
 

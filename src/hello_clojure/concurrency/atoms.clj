@@ -1,7 +1,7 @@
 (ns hello-clojure.concurrency.atoms
   (:require [clojure.repl :as r :refer [doc]]))
 
-*ns*
+;; *ns*
 
 ;; 创建原子，初始值为:caterpillar
 (def who-atom (atom :caterpillar))
@@ -39,8 +39,7 @@
 (let [n 5]
   (future (dotimes [- n] (swap! counter inc)))
   (future (dotimes [- n] (swap! counter inc)))
-  (future (dotimes [- n] (swap! counter inc)))
-  )
+  (future (dotimes [- n] (swap! counter inc))))
 @counter
 
 
@@ -57,8 +56,7 @@
 (let [n 2]
   (future (dotimes [_ n] (swap! counter inc-print)))
   (future (dotimes [_ n] (swap! counter inc-print)))
-  (future (dotimes [_ n] (swap! counter inc-print)))
-  )
+  (future (dotimes [_ n] (swap! counter inc-print))))
 
 ;; 创建一个原子类型
 
