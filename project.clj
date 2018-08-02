@@ -4,7 +4,7 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
 
                  ;; 日志
                  [com.taoensso/timbre "4.10.0"]
@@ -18,7 +18,7 @@
                  [org.slf4j/jul-to-slf4j "1.7.14"]
                  [org.slf4j/jcl-over-slf4j "1.7.14"]
 
-                 ;; 数据库
+                 ;; 数据库连接
                  [org.clojure/java.jdbc "0.7.5"]
                  ;; mysql驱动
                  [mysql/mysql-connector-java "5.1.45"]

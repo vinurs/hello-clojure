@@ -1,5 +1,6 @@
 (ns hello-clojure.db.jdbc-example.conman
   (:require [mount.core :refer [defstate]]
+            [hikari-cp.core :refer :all]
             [conman.core :as conman]))
 
 
@@ -22,6 +23,9 @@
                 ;; :register-mbeans    false
                 })
 
+;; (def datasource
+;;   (make-datasource pool-spec))
+
 ;; conman是更进一步的封装了
 
 ;; 将内存池跟*db*绑定
@@ -29,14 +33,14 @@
   :start (conman/connect! pool-spec)
   :stop (conman/disconnect! *db*))
 
-;; 这个sql文件里面的所有的函数都会默认调用*db*来进行操作
-(conman/bind-connection *db* "sql/queries.sql")
+;; ;; 这个sql文件里面的所有的函数都会默认调用*db*来进行操作
+;; (conman/bind-connection *db* "sql/queries.sql")
 
-;; 这里要手动执行一下这个start，要不然还是没有创建*db*，参考下面的回答
-;; https://github.com/luminus-framework/conman/issues/18
-(mount.core/start)
+;; ;; 这里要手动执行一下这个start，要不然还是没有创建*db*，参考下面的回答
+;; ;; https://github.com/luminus-framework/conman/issues/18
+;; (mount.core/start)
 
 
-(create-user! {:id "foo" :first_name "Bob" :last_name "Bobberton" :email nil :pass nil})
+;; (create-user! {:id "foo" :first_name "Bob" :last_name "Bobberton" :email nil :pass nil})
 
-(get-all-users)
+;; (get-all-users)
