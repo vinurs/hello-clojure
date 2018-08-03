@@ -7,19 +7,19 @@
 @alice-height
 @right-hand-bites
 
-(defn eat-from-right-hand []
-  (dosync (when (pos? @right-hand-bites)
-    (alter right-hand-bites dec)
-    (alter alice-height #(+ % 24)))))
+;; (defn eat-from-right-hand []
+;;   (dosync (when (pos? @right-hand-bites)
+;;     (alter right-hand-bites dec)
+;;     (alter alice-height #(+ % 24)))))
 
-(dosync (eat-from-right-hand))
-@alice-height
-@right-hand-bites
+;; (dosync (eat-from-right-hand))
+;; @alice-height
+;; @right-hand-bites
 
 
-(let [n 2]
-  (future (dotimes [_ n] (eat-from-right-hand)))
-  (future (dotimes [_ n] (eat-from-right-hand)))
-  (future (dotimes [_ n] (eat-from-right-hand))))
+;; (let [n 2]
+;;   (future (dotimes [_ n] (eat-from-right-hand)))
+;;   (future (dotimes [_ n] (eat-from-right-hand)))
+;;   (future (dotimes [_ n] (eat-from-right-hand))))
 @alice-height
 @right-hand-bites
