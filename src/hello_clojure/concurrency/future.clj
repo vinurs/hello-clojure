@@ -2,9 +2,8 @@
 
 ;; future会新开一个线程来处理代码
 (def long-calculation (future (apply + (range 1e8))))
-;; 对于future的调用会立即返回，里面的代码会在另外一个线程里面执行
-;; 可以通过解引用来获取这个值
-;; long-calculation
+;; 对于future的调用会立即 返回，里面的代码会在另外一个线程里面执行;; 可以通过解引用来获取这个值;;
+long-calculation
 ;; @long-calculation
 
 ;; 如果在future还没有执行结束的时候去解引用这个东西，那么会导致我们阻塞
@@ -18,6 +17,12 @@
 ;;        1000
 ;;        :impatient)
 
+;; 检查一个future有没有运行完成
+(future-done? long-calculation)
+;; 取消一个future的执行
+(future-cancel long-calculation)
+;; 看一个future是否已经被取消
+(future-cancelled? long-calculation)
 
 ;; (do (future (println "haha"))
 ;;     (println "hehe"))

@@ -6,10 +6,13 @@
 
 ;; 通过deliver设置
 (deliver x 101)
-@x
+;; 解引用的时候最好加上超时，要不然会被阻塞的
+;; (deref x 100 :un)
+;; @x
 
+;; 通过realized?来检查这个变量有没有被deliver
 (realized? x)
 
-(deliver x 42)
+;; (deliver x 42)
 
-(realized? x)
+;; (realized? x)
