@@ -16,6 +16,36 @@
                     ;; TODO: 还可以提供一些别的信息的，后面补全mysql相关信息
                     })
 
+
+
+(def postgresql-db-spec {:dbtype "postgresql"
+                         ;; 数据库名字
+                         :dbname "xxx"
+                         ;; 用户名
+                         :user "xxx"
+                         ;; 密码
+                         :password "xxx"
+                         :host "xxxx"
+                         :port 3432
+                         })
+
+
+(def mssql-db-spec {:dbtype "mssql"
+                    ;; 数据库名字
+                    :dbname "xxx"
+                    ;; 用户名
+                    :user "xxx"
+                    ;; 密码
+                    :password "xxx"
+                    :host "xxx"
+                    :port 1433
+                    })
+
+(j/query postgresql-db-spec ["SELECT 3*5 AS result"])
+
+(j/query mssql-db-spec ["SELECT 3*5 AS result"])
+
+
 ;; 一个简单的使用
 (j/query mysql-db-spec ["SELECT 3*5 AS result"])
 ;; => {:result 15}

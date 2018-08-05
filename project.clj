@@ -19,9 +19,17 @@
                  [org.slf4j/jcl-over-slf4j "1.7.14"]
 
                  ;; 数据库连接
-                 [org.clojure/java.jdbc "0.7.5"]
+                 [org.clojure/java.jdbc "0.7.7"]
                  ;; mysql驱动
-                 [mysql/mysql-connector-java "5.1.45"]
+                 ;; [mysql/mysql-connector-java "5.1.45"]
+                 [mysql/mysql-connector-java "8.0.12"]
+                 ;; postgresql驱动
+                 [org.postgresql/postgresql "42.2.4"]
+                 ;; ms sqlserver驱动
+                 [com.microsoft.sqlserver/mssql-jdbc "7.0.0.jre8"]
+
+                 ;; 直接根据sql文件来生成函数，这个其实可以不用包含了，conman里面应该已经有了
+                 [com.layerware/hugsql "0.4.8"]
 
                  ;; 数据库连接池
                  ;; clojure封装的HikariCP JDBC连接池
@@ -32,9 +40,6 @@
                  ;; timer
                  [tools-timer "1.0.4"]
 
-
-                 ;; 直接根据sql文件来生成函数，这个其实可以不用包含了，conman里面应该已经有了
-                 [com.layerware/hugsql "0.4.8"]
 
                  [mount "0.1.12"]]
 
