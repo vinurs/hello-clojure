@@ -30,7 +30,7 @@
                  [conman "0.7.6"]
 
                  ;; timer
-                 [wickedshell/tools-timer "1.0.4"]
+                 [tools-timer "1.0.4"]
 
 
                  ;; 直接根据sql文件来生成函数，这个其实可以不用包含了，conman里面应该已经有了
