@@ -29,11 +29,11 @@
                  [com.microsoft.sqlserver/mssql-jdbc "7.0.0.jre8"]
 
                  ;; 直接根据sql文件来生成函数，这个其实可以不用包含了，conman里面应该已经有了
-                 [com.layerware/hugsql "0.4.8"]
+                 [com.layerware/hugsql "0.4.9" :exclusions [org.clojure/java.jdbc]]
 
                  ;; 数据库连接池
                  ;; clojure封装的HikariCP JDBC连接池
-                 [hikari-cp "2.4.0"]
+                 [hikari-cp "2.6.0"]
                  ;; 在hikari-cp上面更进一步的封装，直接调用
                  [conman "0.7.6"]
 
