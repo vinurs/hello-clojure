@@ -1,4 +1,5 @@
-(ns hello-clojure.datatypes.keywords)
+(ns hello-clojure.datatypes.keywords
+  (:require [clojure.string :as str]))
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -6,6 +7,7 @@
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 在clojure还有一种基本数据类型就是关键字，用得最多的就是在字典里面当做key来用
+;; 关键字求值就是他们本身
 :a
 :rumplestiltsken
 :34
@@ -26,18 +28,9 @@
 (:1 {1 2 2 1 :1 "hi"})
 
 ;; (#(map + %&) 1 2 3 4 5)
-
 :a-keyword
 ;;=> :a-keyword
 
-;; 两个冒号开头表示当前namespace的关键字
-::also-a-keyword
-;;=> :hello-clojure.datatypes.keywords/also-a-keyword
-
-;; 如果要表示a命名空间里面的关键字hello，那么用下面的方法来实现
-;; (:a/hello)
-;; 而不是
-;; (hello/:a)
 
 ;; 关键字的求值就是他们自己
 
@@ -104,7 +97,70 @@
 (test1/bar)
 ;; (test1/foo)
 
+
+(ns hello-clojure.datatypes.keywords)
+
 (def hello-vinurs "hello ,vinurs")
 hello-vinurs
 ;; ::用来引用当前命名空间的关键字
 ::hello-vinurs
+
+
+(def person {:name "Sandra Cruz"
+             :city "Portland, ME"})
+;;= #'user/person
+
+
+;; :、::的用法
+(:city person)
+;;= "Portland, ME"
+
+:a
+
+;; 两个冒号开头表示当前namespace的关键字
+::also-a-keyword
+;;=> :hello-clojure.datatypes.keywords/also-a-keyword
+;; 如果要表示a命名空间里面的关键字hello，那么用下面的方法来实现
+;; (:a/hello)
+;; 而不是
+;; (hello/:a)
+
+(def pizza {:name "Ramunto's"
+            :location "Claremont, NH"
+            ::location "43.3734,-72.3365"})
+pizza
+;; => {:name "Ramunto's", :location "Claremont, NH", :hello-clojure.datatypes.keywords/location "43.3734,-72.3365"}
+
+(:hello-clojure.datatypes.keywords/location pizza)
+(:location pizza)
+
+(name :hello-clojure.datatypes.keywords/location)
+(namespace :hello-clojure.datatypes.keywords/location)
+(namespace :location)
+
+
+;; 这里是一篇对clojure的keyword讲得比较好的文章
+;; https://www.deepbluelambda.org/programming/clojure/know-your-keywords
+
+(prn :foo)
+;; :foo
+(prn :example/foo)
+;; :example/foo
+(prn :clojure.string/foo)
+;; :clojure.string/foo
+(prn :clojure.is.awesome/foo)
+;; :clojure.is.awesome/foo
+(prn :str/foo)
+;; :str/foo
+
+
+(prn ::str/foo)                ;; :clojure.string/foo
+(prn ::clojure.string/foo)     ;; :clojure.string/foo
+
+;; (prn ::awesome/foo)
+;; ERROR: Invalid token: ::awesome/foo
+;; (prn ::clojure.is.awesome/foo)
+;; ERROR: Invalid token: ::clojure.is.awesome/foo
+
+
+;; ::这个我们不怎么常用，目前也不会遇到两个的，但是在clojure最新的spec里面貌似会经常用到
