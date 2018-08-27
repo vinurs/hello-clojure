@@ -6,11 +6,8 @@
 ;; 字符串
 "abc"
 
+;; 查看一个数据类型
 (class \a)
-;; 特殊字符
-\space
-\newline
-\return
 
 ;; 这个就是非法的
 ;; \aaa
@@ -33,6 +30,7 @@ you are welcome"
 ;; 字符串
 "jam"
 
+
 ;; 字符
 \j
 \[
@@ -45,3 +43,21 @@ you are welcome"
 ;; 字符串连接操作
 (def my-name "Chewbacca")
 (str "\"Uggllglglglglglglglll\" - " name)
+
+
+;; unicode的表示方法
+\u00ff
+;; 八进制表示
+\o41
+\o12
+;; 貌似不支持16进制表示，不过一般情况下也用不到
+
+
+;; 特殊字符
+\space
+\newline
+\return
+\space
+\formfeed
+\backspace
+\tab
