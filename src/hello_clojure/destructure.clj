@@ -523,3 +523,143 @@
 ;; 向量、list、map都可以用来解构
 ;; 向量依次解构里面每个元素
 ;; map依次解构里面的key
+
+
+
+(defn current-position []
+  [51.503331, -0.119500])
+
+(defn geohash [lat lng]
+  ;; this function take two separate values as params.
+  ;; and it return a geohash for that position
+  )
+
+(let [coord (current-position)
+      lat   (first coord)
+      lng   (second coord)]
+  (geohash lat lng))
+
+(let [[lat lng] (current-position)]
+  (geohash lat lng))
+
+(let [[one two three] [1 2 3]]
+  (println "one:" one)
+  (println "two:" two)
+  (println "three:" three))
+
+
+(let [[one two three] '(1 2 3)]
+  (println "one:" one)
+  (println "two:" two)
+  (println "three:" three))
+
+(let [[one two three] (range 1 4)]
+  (println "one:" one)
+  (println "two:" two)
+  (println "three:" three))
+
+(let [[_ _ three] (range 1 10)]
+  three)
+
+(let [[_ _ three & numbers] (range 1 10)]
+  numbers)
+;;=> (4 5 6 7 8 9)
+
+(let [[_ _ three & numbers :as all-numbers] (range 1 10)]
+  all-numbers)
+;;=> (1 2 3 4 5 6 7 8 9)
+
+(defn current-position []
+  {:lat 51.503331, :lng -0.119500})
+
+(let [coord (current-position)
+      lat   (:lat coord)
+      lng   (:lng coord)]
+  (geohash lat lng))
+
+(let [{lat :lat, lng :lng} (current-position)]
+  (geohash lat lng))
+
+(let [{:keys [lat lng]} (current-position)]
+  (geohash lat lng))
+
+(let [{lat :lat, lng :lng :as coord} (current-position)]
+  (println "calculating geohash for coordinates: " coord)
+  (geohash lat lng))
+
+
+(let [{:keys [lat lng] :as coord} (current-position)]
+  (println "calculating geohash for coordinates: " coord)
+  (geohash lat lng))
+
+(let [{:strs [lat lng] :as coord} {"lat" 51.503331, "lng" -0.119500}]
+  (println "calculating geohash for coordinates: " coord)
+  (geohash lat lng))
+
+
+;; key跟str混合结构
+(let [{:strs [lng] :keys [lat] :as coord} {:lat 51.503331, "lng" -0.119500}]
+  (println "calculating geohash for coordinates: " coord)
+  (println lng lat)
+  (geohash lat lng))
+
+
+(defn connect-db [{:keys [host port db-name username password]
+                   :or   {host     "localhost"
+                          port     12345
+                          db-name  "my-db"
+                          username "db-user"
+                          password "secret"}
+                   :as cfg}]
+  (println "connecting to:" host "port:" port "db-name:" db-name
+           "username:" username "password:" password))
+
+(connect-db {:host "server"})
+;; connecting to: server port: 12345 db-name: my-db username: db-user password: secret
+
+(connect-db {:host "server" :username "user2" :password "Passowrd1"})
+;; connecting to: server port: 12345 db-name: my-db username: user2 password: Passowrd1
+
+
+
+(defn connect-db [host ; mandatory parameter
+                  & {:keys [port db-name username password]
+                     :or   {port     12345
+                            db-name  "my-db"
+                            username "db-user"
+                            password "secret"}}]
+  (println "connecting to:" host "port:" port "db-name:" db-name
+           "username:" username "password:" password))
+
+(connect-db "server")
+;; connecting to: server port: 12345 db-name: my-db username: db-user password: secret
+
+(connect-db "server" :username "user2" :password "Passowrd1")
+;; connecting to: server port: 12345 db-name: my-db username: user2 password: Passowrd1
+
+
+
+(def contact
+  {:firstname "John"
+   :lastname  "Smith"
+   :age       25
+   :phone     "+44.123.456.789"
+   :emails    "jsmith@company.com"})
+
+(let [{firstname :firstname age :age} contact]
+  (str "Hi, I'm " firstname " and I'm " age " years old."))
+;;=> "Hi, I'm John and I'm 25 years old."
+
+(let [{name :firstname years-old :age} contact]
+  (str "Hi, I'm " name " and I'm " years-old " years old."))
+;;=> "Hi, I'm John and I'm 25 years old."
+
+
+(defn distance [{x1 :x y1 :y} {x2 :x y2 :y}]
+  (let [square (fn [n] (*' n n))]
+    (Math/sqrt
+     (+ (square (- x1 x2))
+        (square (- y1 y2))))))
+
+(distance {:x 3, :y 2} {:x 9, :y 7})
+;;=> 7.810249675906654
