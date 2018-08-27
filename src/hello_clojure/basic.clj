@@ -7,6 +7,15 @@
   (:gen-class))
 
 
+;; 用来把字符串转成clojure代码
+(read-string "42")
+
+(pr-str [1 2 3])
+
+(read-string "[1 2 3]")
+
+\a
+
 ;; 类似java，文件名用下划线，命名空间用横线
 
 ;; 返回当前的namespace的字符串名字

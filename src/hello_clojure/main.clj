@@ -3,11 +3,12 @@
             [taoensso.timbre :as log]
             [taoensso.timbre.appenders.core :as appenders]
             )
-
-  (:gen-class)
-  )
+  (:gen-class))
 
 
+;; ::basic/a
+;; :a
+;; ::a
 
 ;; 主函数入口
 (defn -main
