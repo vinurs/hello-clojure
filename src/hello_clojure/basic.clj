@@ -362,3 +362,12 @@ fav-food
 ;;   [n]
 ;;   (if (= n 0) true
 ;;       *(my-odd? (dec n))))
+
+
+1
+"a string"
+["a" "vector" "of" "string"]
+
+(+ 1 2 3)
+
+(str "It was the panda " "in the library " "with a dust buster")
