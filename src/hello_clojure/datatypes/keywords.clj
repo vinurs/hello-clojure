@@ -154,8 +154,10 @@ pizza
 ;; :str/foo
 
 
-(prn ::str/foo)                ;; :clojure.string/foo
-(prn ::clojure.string/foo)     ;; :clojure.string/foo
+;; (prn ::str/foo)
+;; :clojure.string/foo
+;; (prn ::clojure.string/foo)
+;; :clojure.string/foo
 
 ;; (prn ::awesome/foo)
 ;; ERROR: Invalid token: ::awesome/foo
