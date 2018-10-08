@@ -14,8 +14,8 @@
                                   (list 'str "Assert failed: "
                                         (list 'pr-str (list 'quote x))))))))
 
-(vinurs-assert (= 1 2))
-(vinurs-assert (= 1 1))
+;; (vinurs-assert (= 1 2))
+;; (vinurs-assert (= 1 1))
 
 (macroexpand '(vinurs-assert (= 1 2)))
 

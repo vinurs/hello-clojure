@@ -10,11 +10,11 @@
 
 ;; 宏定义square
 (defmacro square [x] `(* ~x ~x))
-(map square (range 10))
+;; (map square (range 10))
 ;; 这里会报错，宏不能作为map的参数
 
 ;; 那么就需要这样包装一下
-(map (fn [n] (square n)) (range 10))
+;; (map (fn [n] (square n)) (range 10))
 
 
 (defmacro our-and ([] true)
@@ -22,4 +22,4 @@
   ([x & next]
    `(if ~x (our-and ~@next) ~x)))
 
-(our-and true true)
+;; (our-and true true)

@@ -41,9 +41,9 @@
                     :port 1433
                     })
 
-(j/query postgresql-db-spec ["SELECT 3*5 AS result"])
+;; (j/query postgresql-db-spec ["SELECT 3*5 AS result"])
 
-(j/query mssql-db-spec ["SELECT 3*5 AS result"])
+;; (j/query mssql-db-spec ["SELECT 3*5 AS result"])
 
 
 ;; 一个简单的使用
@@ -69,48 +69,48 @@
 ;; 数据库的基本操作，创建、读取、更新、删除
 ;; Create，也就是插入
 ;; 插入数据库，这个会自动建立连接、销毁连接，为什么要提这个，为后面我们使用连接池作铺垫
-(j/insert! mysql-db-spec
-           :fruit {:name "hello"
-                   :appearance "large"
-                   :cost 32
-                   :grade 10})
-;; Read
-(j/query   mysql-db-spec
-           ["SELECT * FROM fruit WHERE name = ?" "Apple"])
+;; (j/insert! mysql-db-spec
+;;            :fruit {:name "hello"
+;;                    :appearance "large"
+;;                    :cost 32
+;;                    :grade 10})
+;; ;; Read
+;; (j/query   mysql-db-spec
+;;            ["SELECT * FROM fruit WHERE name = ?" "Apple"])
 
-;; Update
-(j/update! mysql-db-spec :fruit
-           ;; 字段更新
-           {:name "nihao"
-            :cost "100"}
-           ;; where语句
-           ["id = ?" 1])
+;; ;; Update
+;; (j/update! mysql-db-spec :fruit
+;;            ;; 字段更新
+;;            {:name "nihao"
+;;             :cost "100"}
+;;            ;; where语句
+;;            ["id = ?" 1])
 
-;; Delete
-(j/delete! mysql-db-spec :fruit
-           ;; where语句
-           ["id = ?" 2])
+;; ;; Delete
+;; (j/delete! mysql-db-spec :fruit
+;;            ;; where语句
+;;            ["id = ?" 2])
 
-;; 删除数据库
-;; 定义删除的ddl
-(def drop-fruit-table-ddl (j/drop-table-ddl :fruit))
-;; (j/db-do-commands mysql-db-spec
-;;                   [drop-fruit-table-ddl])
+;; ;; 删除数据库
+;; ;; 定义删除的ddl
+;; (def drop-fruit-table-ddl (j/drop-table-ddl :fruit))
+;; ;; (j/db-do-commands mysql-db-spec
+;; ;;                   [drop-fruit-table-ddl])
 
-;; 使用jdbc提供的方法操控数据库
-;; 插入数据库，这个会自动建立连接、销毁连接，为什么要提这个，为后面我们使用连接池作铺垫
-;; 同时插入多行数据
-(j/insert-multi! mysql-db-spec :fruit ;; 数据库表名称
-                 [{:name "Apple" :appearance "rosy" :cost 24}
-                  {:name "Orange" :appearance "round" :cost 49}])
-;; ({:generated_key 1} {:generated_key 2})
+;; ;; 使用jdbc提供的方法操控数据库
+;; ;; 插入数据库，这个会自动建立连接、销毁连接，为什么要提这个，为后面我们使用连接池作铺垫
+;; ;; 同时插入多行数据
+;; (j/insert-multi! mysql-db-spec :fruit ;; 数据库表名称
+;;                  [{:name "Apple" :appearance "rosy" :cost 24}
+;;                   {:name "Orange" :appearance "round" :cost 49}])
+;; ;; ({:generated_key 1} {:generated_key 2})
 
-;; 查询数据库
-(j/query mysql-db-spec
-         ["select * from fruit where appearance = ?" "rosy"]
-         ;; 对结果进行处理
-         {:row-fn :cost})
-;; (24)
+;; ;; 查询数据库
+;; (j/query mysql-db-spec
+;;          ["select * from fruit where appearance = ?" "rosy"]
+;;          ;; 对结果进行处理
+;;          {:row-fn :cost})
+;; ;; (24)
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
