@@ -31,16 +31,16 @@
                          })
 
 ;; 这里构造了一个内存池对象
-(def datasource
-  (make-datasource datasource-options))
+;; (def datasource
+;;   (make-datasource datasource-options))
 
 
 ;; 对于用db-spec的地方传参用内存池对象来，这样就可以使用内存池了
-(jdbc/with-db-connection [conn {:datasource datasource}]
-  (let [rows (jdbc/query conn ["select * from fruit where appearance = ?" "rosy"])]
-    (println rows)))
+;; (jdbc/with-db-connection [conn {:datasource datasource}]
+;;   (let [rows (jdbc/query conn ["select * from fruit where appearance = ?" "rosy"])]
+;;     (println rows)))
 
-(close-datasource datasource)
+;; (close-datasource datasource)
 
 
 ;; (defstate ^:dynamic *db*

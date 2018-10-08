@@ -2,10 +2,13 @@
   (:require [hello-clojure.basic :as basic]
             [taoensso.timbre :as log]
             [taoensso.timbre.appenders.core :as appenders])
-
   (:gen-class))
 
 
+
+;; ::basic/a
+;; :a
+;; ::a
 
 ;; 主函数入口
 (defn -main
