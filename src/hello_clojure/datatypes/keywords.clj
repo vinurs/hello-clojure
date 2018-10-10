@@ -153,6 +153,7 @@ pizza
 (prn :str/foo)
 ;; :str/foo
 
+(prn "hello")
 
 ;; (prn ::str/foo)
 ;; :clojure.string/foo
@@ -166,3 +167,19 @@ pizza
 
 
 ;; ::这个我们不怎么常用，目前也不会遇到两个的，但是在clojure最新的spec里面貌似会经常用到
+::foo
+;; 下面的将会抛出异常
+;; ::foo/bar
+
+;; 下面这几个的区别是什么
+;; :foo, ::foo, ::bar/foo, and :bar/foo?
+(defn print-items
+  [items]
+  (println (str "The items are: " (str/join ", " items))))
+;; (print-items "aa")
+
+(ns-refers *ns*)
+
+(defn print-items
+  [items]
+  (println (str "The items are: " (clojure.string/join ", " items))))
