@@ -6,8 +6,13 @@
 
   :dependencies [[org.clojure/clojure "1.9.0"]
 
+                 [ring "1.7.0"]
+                 [aleph "0.4.6"]
+
                  ;; 日志
                  [com.taoensso/timbre "4.10.0"]
+
+                 [metosin/reitit "0.2.3"]
 
                  ;; logback框架
                  [ch.qos.logback/logback-classic "1.1.2"]
