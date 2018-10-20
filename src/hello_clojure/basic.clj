@@ -21,8 +21,11 @@
 ;; 返回当前的namespace的字符串名字
 (ns-name *ns*)
 
+(comment (println "hello"))
+
 (def x 5)
 x
+
 ;; 指向x本身，并不对他求值，应该就类似于C语言里面的地址的意思
 (var x)
 ;; 简写
@@ -371,3 +374,21 @@ fav-food
 (+ 1 2 3)
 
 (str "It was the panda " "in the library " "with a dust buster")
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; clojure programming
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn average
+  [numbers]
+  (/ (apply + numbers) (count numbers)))
+(average '(1 2 3 4 6 7 8))
+(average [60 80 100 400])
+
+
+;; recur/loop/defn
+;; recur总是把控制权交给最近的一个loop或者defn
+(defn countdown [x]
+  (if (zero? x) :blastoff!
+      (do (println x)
+          (recur (dec x)))))
+;; (countdown 5)
