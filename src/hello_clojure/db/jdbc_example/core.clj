@@ -47,19 +47,19 @@
 
 
 ;; 一个简单的使用
-(j/query mysql-db-spec ["SELECT 3*5 AS result"])
+;; (j/query mysql-db-spec ["SELECT 3*5 AS result"])
 ;; => {:result 15}
 
 
 ;; 创建表
-(def create-fruit-table-ddl
-  ;; 构造一个ddl(数据定义语言)
-  (j/create-table-ddl :fruit
-                      [[:id :int]
-                       [:name "varchar(32)"]
-                       [:appearance "varchar(32)"]
-                       [:cost :int]
-                       [:grade :real]]))
+;; (def create-fruit-table-ddl
+;;   ;; 构造一个ddl(数据定义语言)
+;;   (j/create-table-ddl :fruit
+;;                       [[:id :int]
+;;                        [:name "varchar(32)"]
+;;                        [:appearance "varchar(32)"]
+;;                        [:cost :int]
+;;                        [:grade :real]]))
 
 ;; 使用命令来使用刚才ddl创建表，同时建立索引
 ;; (j/db-do-commands mysql-db-spec
@@ -74,11 +74,11 @@
 ;;                    :appearance "large"
 ;;                    :cost 32
 ;;                    :grade 10})
-;; ;; Read
+;; Read
 ;; (j/query   mysql-db-spec
 ;;            ["SELECT * FROM fruit WHERE name = ?" "Apple"])
 
-;; ;; Update
+;; Update
 ;; (j/update! mysql-db-spec :fruit
 ;;            ;; 字段更新
 ;;            {:name "nihao"
@@ -110,6 +110,7 @@
 ;;          ["select * from fruit where appearance = ?" "rosy"]
 ;;          ;; 对结果进行处理
 ;;          {:row-fn :cost})
+;; (24)
 ;; ;; (24)
 
 
