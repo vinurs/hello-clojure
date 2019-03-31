@@ -1,7 +1,7 @@
 (ns hello-clojure.destructure)
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 解构
+;; 解构，优雅的代码
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -12,6 +12,8 @@
 
 ;; 手动解构，用函数来获取每一个collection里面的值
 (def my-line [[5 10] [10 20]])
+;; 如果没有解构，但是我们需要获取里面的元素的话只能按照下面的方法来，比较丑陋
+;; 不紧丑陋，而且容易出错
 (let [p1 (first my-line)
       p2 (second my-line)
       x1 (first p1)
@@ -531,20 +533,24 @@
 ;; 是这里的例子
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 返回当前的经纬度信息
 (defn current-position []
   [51.503331, -0.119500])
 
+;; 打印当前的经纬度
 (defn geohash [lat lng]
   ;; this function take two separate values as params.
   ;; and it return a geohash for that position
   (println "geohash:" lat lng))
 
 ;; 如果没有解构，那么我们需要这样处理参数
+;; 只能一个个把参数解出来
 (let [coord (current-position)
       lat   (first coord)
       lng   (second coord)]
   (geohash lat lng))
 
+;; 解构就是让你把一个结构化的数据对应位置的数据提取出来
 ;; 有了解构以后，代码就清晰多了
 (let [[lat lng] (current-position)]
   (geohash lat lng))
@@ -567,22 +573,26 @@
   (println "two:" two)
   (println "three:" three))
 
-;; 只解构特定的位置
+;; 有时候有些位置的数据我们是不需要的
+;; 那么这时候我们可以只解构特定的位置
 (let [[_ _ three] (range 1 10)]
   three)
 
-;; 解构剩余参数
+;; 解构剩余参数到某个变量里面
 (let [[_ _ three & numbers] (range 1 10)]
   numbers)
 ;;=> (4 5 6 7 8 9)
 
-;; 用关键字来引用原始的数据
+;; 如果想解构的同时还保留着原始的数据
+;; 那么，用关键字来引用原始的数据
 (let [[_ _ three & numbers :as all-numbers] (range 1 10)]
   all-numbers)
 ;;=> (1 2 3 4 5 6 7 8 9)
 
+;; map解构
 (defn current-position []
-  {:lat 51.503331, :lng -0.119500})
+  {:lat 51.503331, :lng -0.119500
+   "a" "bbb" 1 2})
 
 ;; 没有解构的map
 (let [coord (current-position)
@@ -591,14 +601,24 @@
   (geohash lat lng))
 
 ;; 有了解构以后的map
-(let [{lat :lat, lng :lng} (current-position)]
-  (geohash lat lng))
+;; map解构就是一个变量一个key
+(let [{lat :lat, lng :lng a "a" v1 1} (current-position)]
+  (geohash lat lng)
+  (println a v1))
 
 ;; 对于关键字还可以统一解构
-(let [{:keys [lat lng]} (current-position)]
+;; 例如下面的lat就会去寻找:lat关键字
+(let [{:keys [lat lng]
+       a "a" v1 1} (current-position)]
+  (geohash lat lng)
+  (println a v1))
+
+;; 解构的同时保留原始数据
+(let [{lat :lat, lng :lng :as coord} (current-position)]
+  (println "calculating geohash for coordinates: " coord)
   (geohash lat lng))
 
-(let [{lat :lat, lng :lng :as coord} (current-position)]
+(let [{:keys [:lat :lng] :as coord} (current-position)]
   (println "calculating geohash for coordinates: " coord)
   (geohash lat lng))
 
@@ -607,6 +627,8 @@
   (println "calculating geohash for coordinates: " coord)
   (geohash lat lng))
 
+
+;; 如果map的key是str，那么就要用strs来进行解构
 ;; 对于key是str的解构
 (let [{:strs [lat lng] :as coord} {"lat" 51.503331, "lng" -0.119500}]
   (println "calculating geohash for coordinates: " coord)
@@ -620,12 +642,15 @@
   (geohash lat lng))
 
 
+;; 同样的map的key也有可能是符号，那么用syms来进行解构
 ;; key是符号的解构
 (let [{:syms [lat lng] :as coord} {'lat 51.503331, 'lng -0.119500}]
   (println "calculating geohash for coordinates: " coord)
   (geohash lat lng))
 
 
+;; 有时候map里面可能没有一些key，这时候我们在想最好这些能有一个默认值，
+;; 那么:or就是用来做这个的
 ;; map解构的时候可以对缺失的key加上默认值
 (defn connect-db [{:keys [host port db-name username password]
                    :or   {host     "localhost"
@@ -646,6 +671,7 @@
 
 ;; 函数参数其实本身也就是一种解构
 ;; 利用解构对函数可变参数的解构，不过这个情况比较特殊，很少用
+;; 剩余参数要能配对key-map出现
 (defn connect-db [host ; mandatory parameter
                   & {:keys [port db-name username password]
                      :or   {port     12345
@@ -660,7 +686,6 @@
 
 (connect-db "server" :username "user2" :password "Passowrd1")
 ;; connecting to: server port: 12345 db-name: my-db username: user2 password: Passowrd1
-
 
 
 (def contact
@@ -749,6 +774,7 @@
   (println one two))
 ;; 1 2
 
+;; 如果想获取第100跟200个元素，那么就直接这样解构就好了
 (let [{v1 100 v2 200} (apply vector (range 500))]
   (println v1 v2))
 ;; 100 200
@@ -759,6 +785,14 @@
   (println blue white black))
 ;; blue white nil
 
+
+(defn ls [path & flags]
+  (let [{:keys [all long-format human-readable sort-by-time]}
+        (set flags)]
+    ;; now you can test your flags
+    (when long-format (comment do someting))
+    ;; ....
+    ))
 
 ;; 解构有namespace限定的key
 ;; namespaced keys
@@ -822,6 +856,8 @@
 ;;   (println lastname "-" position))
 ;; Smith - CEO
 
+
+;; 同样的有namespace限定的符号解构也是一样的
 ;; 有namespace限定的符号解构
 (def contact
   {'firstname          "John"
